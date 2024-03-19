@@ -62,4 +62,4 @@ router.delete('/:id', (req, res) => {
 	  res.json({ message: 'Vehicle deleted', changes: this.changes });
 	});
   });
-  
+  module.exports = router;

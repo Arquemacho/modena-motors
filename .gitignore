@@ -1,0 +1,12 @@
+# Dependencias
+/node_modules
+
+# Sistema
+.DS_Store
+
+# Directorios de producción
+/build
+/dist
+
+# Archivos sensibles
+*.env

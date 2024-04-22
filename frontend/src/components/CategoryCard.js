@@ -2,20 +2,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/CategoryCard.css';
 
-const CategoryCard = ({ category, imagePath, linkTo, description }) => {
-    return (
-        <div className="category-card" data-aos="zoom-in-up">
-            <Link to={linkTo}>
-                <div className="category-image-wrapper">
-                    <img src={imagePath} alt={category} className="category-image" />
-                </div>
-                <div className="category-content">
-                    <h3 className="category-name">{category}</h3>
-                    <p className="category-description">{description}</p>
-                </div>
-            </Link>
-        </div>
-    );
+const CategoryCard = ({ category, imagePath, linkTo, index }) => {
+  const isReversed = index % 2 !== 0;
+
+  return (
+    <div className={`category-card ${isReversed ? 'reversed' : ''}`} data-aos="fade-up">
+      <div className="category-image-content" style={{ backgroundImage: `url(${imagePath})` }}>
+        {/* Imagen de fondo con efecto de desvanecimiento */}
+      </div>
+      <div className="category-details">
+        <h3 className="category-title">{category}</h3>
+        <p className="category-description">Explora nuestra selección exclusiva de {category.toLowerCase()}.</p>
+        <Link to={linkTo} className="category-button">Ver Más</Link>
+      </div>
+    </div>
+  );
 };
 
 export default CategoryCard;

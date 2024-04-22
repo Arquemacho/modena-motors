@@ -66,19 +66,20 @@ const HomePage = () => {
             <section className="category-section" data-aos="fade-up">
                 <h2>Explora por Categorías</h2>
                 <div className="category-list">
-                    {categories.map(category => (
-                        <CategoryCard
-                            key={category.name}
-                            category={category.name}
-                            imagePath={category.imagePath}
-                            linkTo={category.linkTo}
-                        />
-                    ))}
+                  {categories.map((category, index) => (
+                    <CategoryCard
+                      key={category.name}
+                      category={category.name}
+                      imagePath={category.imagePath}
+                      linkTo={category.linkTo}
+                      index={index} // Pasar el índice aquí
+                    />
+                  ))}
                 </div>
             </section>
-            <Testimonials testimonials={testimonials} />
-            <LaunchAnnouncements announcements={launches} />
-            <div className="full-catalogue-link" data-aos="fade-up">
+            <Testimonials testimonials={testimonials}/>
+            <LaunchAnnouncements announcements={launches}/>
+            <div className="full-catalogue-link" data-aos="zoom-in">
                 <Link to="/vehicles/all" className="explore-all-button">Explora Todos Nuestros Modelos</Link>
             </div>
         </main>

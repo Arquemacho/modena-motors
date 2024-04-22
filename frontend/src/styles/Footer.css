@@ -1,0 +1,45 @@
+.footer {
+    background-color: #222; /* Fondo oscuro para el footer */
+    color: #fff; /* Texto blanco para contrastar con el fondo oscuro */
+    padding: 2rem; /* Espaciado interior amplio */
+    font-family: 'Arial', sans-serif; /* Consistencia en la tipografía */
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual tamaño */
+    gap: 2rem; /* Espacio entre columnas */
+    align-items: start; /* Alinea contenido al inicio de cada celda */
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column; /* Organiza el contenido en columnas para más claridad */
+    gap: 0.5rem; /* Espaciado entre elementos de la columna */
+}
+
+.footer-links, .contact-info {
+    display: flex;
+    flex-direction: column; /* Vertical alignment for better structure */
+    gap: 0.5rem;
+}
+
+.footer-link, .contact-info-item {
+    color: #fff;
+    text-decoration: none; /* Remueve el subrayado */
+    transition: color 0.3s; /* Efecto suave para hover */
+}
+
+.footer-link:hover, .footer-link:focus {
+    color: #aa2727; /* Rojo suave para hover */
+}
+
+.footer-address {
+    font-style: italic; /* Estilo para la dirección */
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+    }
+}

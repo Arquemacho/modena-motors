@@ -1,0 +1,29 @@
+/* Featurette.css */
+.featurette {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 20px;
+	padding: 2rem;
+  }
+  
+  .featurette-item {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 1rem;
+	width: 300px; /* O ajusta a tu preferencia */
+	text-align: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .featurette-item h3 {
+	color: #333;
+	margin-top: 0;
+  }
+  
+  .featurette-item p {
+	font-size: 1rem;
+	color: #666;
+  }
+  

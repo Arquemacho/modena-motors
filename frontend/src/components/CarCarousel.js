@@ -1,9 +1,8 @@
-// CarCarousel.js
 import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import '../styles/CarCarousel.css'; // Tus estilos personalizados
+import '../styles/CarCarousel.css';
 
 const CarCarousel = ({ cars }) => {
     const settings = {
@@ -12,11 +11,12 @@ const CarCarousel = ({ cars }) => {
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay: true
+        autoplay: true,
+        autoplaySpeed: 3000
     };
 
     if (!cars || cars.length === 0) {
-        return <div>No cars available</div>;
+        return <div className="carousel-empty">No cars available</div>;
     }
 
     return (
@@ -27,7 +27,7 @@ const CarCarousel = ({ cars }) => {
                         <img src={car.imageUrl} alt={car.name} />
                         <div className="car-info">
                             <h3>{car.name}</h3>
-                            {/* Añade más información y estilos como necesites */}
+                            <p>{car.description || 'No description available'}</p>
                         </div>
                     </div>
                 ))}

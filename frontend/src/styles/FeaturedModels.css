@@ -1,0 +1,29 @@
+.featured-models .slick-slide {
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    margin: 0 5px;
+}
+
+.model-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.model-info {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.model-info h3 {
+    margin: 10px 0;
+    color: #FFF;
+}
+
+.model-info p {
+    font-size: 1rem;
+    color: #DDD;
+}

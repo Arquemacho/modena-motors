@@ -1,0 +1,27 @@
+.car-carousel .slick-slide {
+    text-align: center;
+    color: white;
+}
+
+.car-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.car-info {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: -5px;
+}
+
+.car-info h3 {
+    margin: 0;
+    color: #FFF;
+}
+
+.car-info p {
+    font-size: 1rem;
+    color: #DDD;
+}

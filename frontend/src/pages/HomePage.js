@@ -10,15 +10,16 @@ import '../styles/HomePage.css';
 
 const HomePage = () => {
     const [cars, setCars] = useState([
-        { id: 1, imageUrl: '../../public/images/hero.jpg', name: "Car 1" },
-        { id: 2, imageUrl: '../../public/images/hero.jpg', name: "Car 2" },
-        // Continúa agregando más coches aquí
-    ]);
+    { id: 1, imageUrl: '/images/models/car2.jpg', name: "Car 1" },
+    { id: 2, imageUrl: '/images/models/car1.jpg', name: "Car 2" },
+    // Añade más coches aquí
+]);
+
 
     const [featuredModels, setFeaturedModels] = useState([
         // Dummy data for featured models
-        { id: 1, imageUrl: '../../public/images/hero.jpg', name: "Model 1", description: "Description 1" },
-        { id: 2, imageUrl: '../../public/images/hero.jpg', name: "Model 2", description: "Description 2" }
+        { id: 1, imageUrl: '/images/hero.jpg', name: "Model 1", description: "Description 1" },
+        { id: 2, imageUrl: "/images/hero.jpg", name: "Model 2", description: "Description 2" }
     ]);
 
     const [testimonials, setTestimonials] = useState([
@@ -53,7 +54,7 @@ const HomePage = () => {
                 <p>Explora nuestra exclusiva colección de super autos, autos deportivos, y autos de ultra lujo.</p>
                 <div className="scroll-down" onClick={handleScroll}>&#x2193;</div>
             </section>
-            <CarCarousel cars={cars} />
+            {/*<CarCarousel cars={cars} */}
             <FeaturedModels models={featuredModels} />
             <section className="featured-section" data-aos="fade-up">
                 <h2>Modelos Destacados</h2>

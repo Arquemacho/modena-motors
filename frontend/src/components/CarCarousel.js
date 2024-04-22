@@ -12,7 +12,8 @@ const CarCarousel = ({ cars }) => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3000
+        autoplaySpeed: 3000,
+        cssEase: "linear"
     };
 
     if (!cars || cars.length === 0) {
@@ -20,11 +21,13 @@ const CarCarousel = ({ cars }) => {
     }
 
     return (
-        <div className="car-carousel">
+        <div className="car-carousel-container">
             <Slider {...settings}>
                 {cars.map(car => (
                     <div key={car.id} className="car-slide">
-                        <img src={car.imageUrl} alt={car.name} />
+                        <div className="car-image-container">
+                            <img src={car.imageUrl} alt={car.name} className="car-image" />
+                        </div>
                         <div className="car-info">
                             <h3>{car.name}</h3>
                             <p>{car.description || 'No description available'}</p>

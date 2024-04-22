@@ -1,55 +1,22 @@
 import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import '../styles/FeaturedModels.css';
+import '../styles/FeaturedModels.css'; // Asegúrate de tener este archivo CSS
 
 const FeaturedModels = ({ models }) => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    };
-
-    if (!models || models.length === 0) {
-        return <div>No featured models available</div>;
-    }
-
     return (
-        <div className="featured-models">
-            <Slider {...settings}>
+        <div className="featured-models-container" data-aos="fade-up">
+            <h2>Modelos Destacados</h2>
+            <div className="models-grid">
                 {models.map(model => (
-                    <div key={model.id} className="model-slide">
+                    <div key={model.id} className="model-card">
                         <img src={model.imageUrl} alt={model.name} className="model-image" />
-                        <div className="model-info">
+                        <div className="model-details">
                             <h3>{model.name}</h3>
                             <p>{model.description}</p>
+                            {/* Agrega más detalles aquí si es necesario */}
                         </div>
                     </div>
                 ))}
-            </Slider>
+            </div>
         </div>
     );
 };

@@ -57,8 +57,8 @@ const HomePage = () => {
     return (
         <main className="homepage">
             <section className="hero" data-aos="fade-right">
-                <h1>Bienvenido a Modena Motors</h1>
-                <p>Explora nuestra exclusiva colección de super autos, autos deportivos, y autos de ultra lujo.</p>
+				<h1 data-aos="zoom-in" data-aos-delay="500">Bienvenido a Modena Motors</h1>
+                <p data-aos="zoom-in" data-aos-delay="500">Explora nuestra exclusiva colección de super autos, autos deportivos, y autos de ultra lujo.</p>
                 <div className="scroll-down" onClick={handleScroll}>&#x2193;</div>
             </section>
             {/*<CarCarousel cars={cars} */}

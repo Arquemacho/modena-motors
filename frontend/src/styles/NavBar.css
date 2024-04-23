@@ -1,12 +1,21 @@
 /* Estilos Generales */
-.navbar {
-    background-color: #000;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Arial', sans-serif;
-}
+* {
+	box-sizing: border-box; /* Asegúrate de agregar esta regla */
+  }
+  
+  .navbar {
+	background-color: #000;
+	padding: 1rem 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-family: 'Arial', sans-serif;
+	z-index: 1000;
+	position: fixed;
+	left: 0;
+	right: 0;
+	/* Quitar margin si existe */
+  }
 
 .navbar-brand {
     color: #fff;

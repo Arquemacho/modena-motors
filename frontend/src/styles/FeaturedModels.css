@@ -40,3 +40,26 @@
     font-size: 1rem;
     color: #666666;
 }
+
+/* Asegúrate de que las flechas estén visibles y estilizadas adecuadamente */
+.slick-prev:before, .slick-next:before {
+	color: #d80000; /* O el color que prefieras */
+  }
+
+  .featured-models-container .models-grid {
+	padding: 0 40px; /* Ajustar según necesidad */
+  }
+
+  .model-more-info {
+	padding: 10px 20px;
+	background-color: #d80000;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	display: inline-block;
+	margin-top: 10px;
+  }
+  
+  .model-more-info:hover {
+	background-color: #ff0000;
+  }

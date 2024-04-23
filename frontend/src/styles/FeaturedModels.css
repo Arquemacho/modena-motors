@@ -6,7 +6,7 @@
 .models-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    gap: 35px;
 }
 
 .model-card {
@@ -23,31 +23,28 @@
 
 .model-image {
     width: 100%;
-    height: 200px; /* o lo que mejor se vea en tu diseño */
+    height: auto; /* o lo que mejor se vea en tu diseño */
     object-fit: cover;
 }
 
 .model-details {
-    padding: 15px;
+    padding: 25px;
 }
 
 .model-details h3 {
     margin-bottom: 10px;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .model-details p {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #666666;
 }
 
 /* Asegúrate de que las flechas estén visibles y estilizadas adecuadamente */
 .slick-prev:before, .slick-next:before {
 	color: #d80000; /* O el color que prefieras */
-  }
-
-  .featured-models-container .models-grid {
-	padding: 0 40px; /* Ajustar según necesidad */
+    font-size: 24px;
   }
 
   .model-more-info {
@@ -63,3 +60,94 @@
   .model-more-info:hover {
 	background-color: #ff0000;
   }
+
+.slick-slider .slick-track {
+  display: flex;
+  align-items: center;
+}
+
+.slick-slide {
+    margin-right: 30px; /* Añade espacio entre slides */
+    margin-left: 30px;
+    overflow: hidden;
+}
+
+.slick-list {
+    overflow: hidden;
+    margin: 0 -15px; /* Ajuste negativo para compensar los márgenes extra de slick-slide */
+}
+
+/* Asegurarte de que los controles no interfieran visualmente */
+.slick-prev, .slick-next {
+  width: 20px;
+  height: 20px;
+  border: none;
+  top: 50%;
+  transform: translate(0, -50%);
+  background-color: transparent;
+  color: #d80000;
+  z-index: 9;
+}
+
+.slick-prev {
+  left: -30px; /* Ajusta esta cantidad para mover la flecha más a la izquierda */
+}
+
+.slick-next {
+  right: -30px; /* Ajusta esta cantidad para mover la flecha más a la derecha */
+}
+
+
+
+/* Estilos para el botón 'Ver Más' de cada modelo */
+.model-more-info {
+  padding: 10px 20px;
+  background-color: #d80000;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  display: block; /* o inline-block según tu diseño */
+  text-align: center;
+  margin-top: 15px;
+}
+
+.model-more-info:hover {
+  background-color: #ff0000;
+}
+
+.featured-models-container .models-grid{
+  padding: 40px 60px; /* Más espacio lateral para las flechas */
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.custom-arrow {
+  width: 30px; /* Ajusta el tamaño de las flechas */
+  height: 30px;
+  background-color: #ccc; /* Color de fondo de las flechas */
+  border-radius: 15px; /* Hacer las flechas redondas */
+  color: #d80000; /* Color del ícono de las flechas */
+}
+
+.custom-arrow:hover {
+  background-color: #d80000; /* Color de fondo al hacer hover */
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .featured-models-container .slick-slide {
+    margin: 0 20px; /* Ajustar márgenes en dispositivos móviles */
+  }
+
+  .featured-models-container .slick-list {
+    margin: 0 -20px;
+  }
+
+  .featured-models-container .slick-prev,
+  .featured-models-container .slick-next {
+    display: none; /* Ocultar flechas en pantallas pequeñas */
+  }
+  .slick-prev { left: 25px; } /* Flecha izquierda más a la izquierda */
+  .slick-next { right: 25px; } /* Flecha derecha más a la derecha */
+}

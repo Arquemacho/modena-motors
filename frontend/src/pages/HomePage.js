@@ -5,6 +5,7 @@ import FeaturedModels from '../components/FeaturedModels';
 import Testimonials from '../components/Testimonials';
 import LaunchAnnouncements from '../components/LaunchAnnouncements';
 import CategoryCard from '../components/CategoryCard'; 
+import BrandsSection from '../components/BrandsSection';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/HomePage.css';
@@ -15,6 +16,13 @@ const HomePage = () => {
         { id: 2, imageUrl: '/images/models/car1.jpg', name: "Car 2" },
         // Añade más coches aquí
     ]);
+
+    const brands = [
+        // Asumiendo que tienes imágenes para cada marca en tu carpeta public/images
+        { name: 'Bugatti', imagePath: '/images/brands/bugatti.jpg' },
+        { name: 'Ferrari', imagePath: '/images/brands/ferrari.jpg' },
+        // Agrega aquí más marcas
+    ];
 
     const categories = [
         { name: 'Super Autos', imagePath: '/images/models/car1.jpg', linkTo: '/vehicles/category/SuperAutos' },
@@ -53,7 +61,6 @@ const HomePage = () => {
             behavior: "smooth"
         });
     };
-
     return (
         <main className="homepage">
             <section className="hero" data-aos="fade-right">
@@ -77,6 +84,7 @@ const HomePage = () => {
                   ))}
                 </div>
             </section>
+            <BrandsSection brands={brands} />
             <Testimonials testimonials={testimonials}/>
             <LaunchAnnouncements announcements={launches}/>
             <div className="full-catalogue-link" data-aos="zoom-in">

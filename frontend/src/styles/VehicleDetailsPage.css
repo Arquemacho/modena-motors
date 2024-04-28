@@ -1,0 +1,25 @@
+.vehicle-details-page {
+    padding: 20px;
+    background-color: #fff;
+    color: #333;
+}
+
+.vehicle-images img {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.vehicle-specs ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.vehicle-specs li {
+    margin-bottom: 10px;
+}
+
+.contact-info p {
+    margin-top: 5px;
+}

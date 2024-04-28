@@ -1,0 +1,29 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const BrandCard = ({ brand }) => (
+  <div className="brand-card" data-aos="fade-up">
+    <img src={brand.imagePath} alt={brand.name} className="brand-image" />
+    <div className="brand-details">
+      <h3>{brand.name}</h3>
+      <Link to={`/vehicles/brand/${brand.name}`} className="view-models-button">
+        Ver Modelos
+      </Link>
+    </div>
+  </div>
+);
+
+const BrandsSection = ({ brands }) => {
+  return (
+    <section className="brands-section">
+      <h2>Nuestras Marcas</h2>
+      <div className="brands-grid">
+        {brands.map((brand, index) => (
+          <BrandCard key={index} brand={brand} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default BrandsSection;

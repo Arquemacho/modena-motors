@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/AdminLoginPage.css'; // Asegúrate de tener este archivo CSS
+import '../styles/AdminLogin.css'; // Asegúrate de importar el CSS
 
-const AdminLoginPage = () => {
+const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (event) => {
     event.preventDefault();
-    // Aquí iría la lógica de autenticación
-    if (password === "admin") { // Simulación de contraseña correcta
-      navigate('/admin-panel');
+    // Aquí iría la lógica para verificar la contraseña
+    if (password === "passwordCorrecto") {
+      navigate('/admin/dashboard'); // Redirige al panel de administrador
     } else {
-      alert("Contraseña incorrecta");
+      alert('Contraseña incorrecta');
     }
   };
 
   return (
-    <div className="admin-login-page">
+    <div className="admin-login">
       <form onSubmit={handleLogin}>
         <label htmlFor="password">Contraseña:</label>
         <input
@@ -25,7 +25,7 @@ const AdminLoginPage = () => {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Introduce tu contraseña"
+          placeholder="Ingrese su contraseña"
         />
         <button type="submit">Iniciar Sesión</button>
       </form>
@@ -33,4 +33,4 @@ const AdminLoginPage = () => {
   );
 };
 
-export default AdminLoginPage;
+export default AdminLogin;

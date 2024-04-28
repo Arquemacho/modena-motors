@@ -1,15 +1,52 @@
 import React from 'react';
-import '../styles/EmployeesPage.css'; // Asegúrate de tener este archivo
+import '../styles/EmployeesPage.css'; // Asegúrate de tener este archivo CSS
 
 const EmployeesPage = () => {
-  // Datos simulados de los empleados
-  const employees = [{
-    id: 1,
-    name: "John Doe",
-    image: "/images/johndoe.jpg",
-    position: "Gerente General",
-    years: 5
-  }];
+  const employees = [
+    {
+      id: 1,
+      name: "Diego Papasito",
+      image: "/images/johndoe.jpg",
+      position: "Dueno de mi Corazon",
+      years: 5
+    },
+	{
+		id: 2,
+		name: "Diego Churrasco",
+		image: "/images/johndoe.jpg",
+		position: "Todos somos Diego",
+		years: 4
+	  },
+	  {
+		id: 3,
+		name: "Diego",
+		image: "/images/johndoe.jpg",
+		position: "Todos somos Diego",
+		years: 3
+	  },
+	  {
+		  id: 4,
+		  name: "Diego  hotdog",
+		  image: "/images/johndoe.jpg",
+		  position: "Todos somos Diego",
+		  years: 2
+		},
+		{
+			id: 5,
+			name: "Diego daddy",
+			image: "/images/johndoe.jpg",
+			position: "Todos somos Diego",
+			years: 1
+		  },
+		  {
+			  id: 6,
+			  name: "Diego Mi amor",
+			  image: "/images/johndoe.jpg",
+			  position: "Todos somos Diego",
+			  years: 6
+			}
+    // Agrega más empleados aquí según sea necesario
+  ];
 
   return (
     <div className="employees-page">

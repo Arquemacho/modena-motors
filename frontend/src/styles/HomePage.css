@@ -11,6 +11,7 @@
     min-height: 90vh;
     padding: 0 20px;
     overflow: hidden;
+	margin-bottom: 40px;
 }
 
 .homepage .btn-primary {

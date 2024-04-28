@@ -8,5 +8,8 @@ body {
 	-moz-osx-font-smoothing: grayscale;
   }
   
+  .content {
+	margin-top: 70px; /* Ajusta este valor según la altura de tu navbar */
+  }
   /* Añade más estilos globales o específicos de la app aquí */
   

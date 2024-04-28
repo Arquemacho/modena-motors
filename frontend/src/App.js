@@ -12,6 +12,7 @@ const App = () => {
   return (
     <Router>
       <NavBar />
+	  <div className="content">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about-us" element={<AboutUsPage />} />
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/employees" element={<EmployeePage />} />
         {/* Añade aquí tus otras rutas */}
       </Routes>
+	  </div>
       <Footer />
     </Router>
   );

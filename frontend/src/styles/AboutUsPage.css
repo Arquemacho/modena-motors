@@ -1,0 +1,61 @@
+/* styles/AboutUsPage.css */
+
+.about-us {
+	font-family: 'Arial', sans-serif;
+	color: #333;
+	line-height: 1.6;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+  }
+  
+  .about-header {
+	text-align: center;
+	padding: 50px 20px;
+	background: url('../../public/images/about-bg.jpg') no-repeat center center;
+	background-size: cover;
+  }
+  
+  .about-title {
+	font-size: 2.5rem;
+	color: #fff;
+  }
+  
+  .about-subtitle {
+	font-size: 1.5rem;
+	color: #ddd;
+	margin-top: 10px;
+  }
+  
+  .about-content {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 40px;
+	padding: 40px 20px;
+  }
+  
+  .about-section {
+	background-color: #f9f9f9;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .section-title {
+	color: #d80000;
+	margin-bottom: 20px;
+  }
+  
+  .about-image {
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	margin-top: 20px;
+  }
+  
+  @media (min-width: 768px) {
+	.about-content {
+	  grid-template-columns: repeat(3, 1fr);
+	}
+  }
+  

@@ -1,20 +1,30 @@
+// backend/routes/authRoutes.js
+
 const express = require('express');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const SECRET_KEY = "tu_clave_secreta"; // Debes cambiar esto por una clave secreta real y mantenerla en una variable de entorno
 const router = express.Router();
+const db = require('../database/db');
 
-// Simula una base de datos de usuarios
-const users = [{ username: 'admin', password: 'password123' }];
-
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find(u => u.username === username && u.password === password);
-
-  if (user) {
-    const token = jwt.sign({ username: user.username }, 'your-secret-key', { expiresIn: '1h' });
-    res.json({ token });
-  } else {
-    res.status(401).json({ message: 'Credenciales inválidas' });
-  }
+  const sql = 'SELECT * FROM users WHERE username = ?';
+  db.get(sql, [username], async (err, user) => {
+    if (err) {
+      return res.status(500).send({ error: 'Error interno del servidor' });
+    }
+    if (!user) {
+      return res.status(401).send({ error: 'Usuario no encontrado' });
+    }
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      const token = jwt.sign({ username: user.username, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+      res.json({ token });
+    } else {
+      res.status(401).send({ error: 'Contraseña incorrecta' });
+    }
+  });
 });
 
 module.exports = router;

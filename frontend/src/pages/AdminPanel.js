@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/AdminPanel.css'; // Asegúrate de tener este archivo CSS
 
 const AdminPanel = () => {
   return (
-    <div className="admin-panel">
-      <h1>Panel de Administración</h1>
-      <div className="admin-links">
-        <Link to="/admin/vehicles">Gestionar Vehículos</Link>
-        <Link to="/admin/employees">Gestionar Empleados</Link>
-        <Link to="/admin/clients">Clientes Preferenciales</Link>
-      </div>
+    <div>
+      <h1>Admin Panel</h1>
+      <nav>
+        <ul>
+          <li><Link to="/admin/vehicles">Manage Vehicles</Link></li>
+          <li><Link to="/admin/employees">Manage Employees</Link></li>
+          <li><Link to="/admin/clients">Manage Clients</Link></li>
+          {/* Add other admin links if necessary */}
+        </ul>
+      </nav>
     </div>
   );
 };

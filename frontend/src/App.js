@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/vehicles" element={<VehiclesGridPage />} />
           <Route path="/employees" element={<EmployeesPage />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin-panel" element={<PrivateRoute><AdminPanel /></PrivateRoute>} />
           <Route path="*" element={<NotFoundPage />} /> {/* Esta ruta captura cualquier URL no definida */}
         </Routes>

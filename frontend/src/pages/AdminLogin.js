@@ -10,17 +10,22 @@ const AdminLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch('/api/auth/login', {
+    console.log("Submit del formulario");
+    console.log("URL de la solicitud:", '/api/auth/login');
+    const response = await fetch('http://localhost:3001/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
+    console.log("Respuesta del servidor:", response);
     if (response.ok) {
       const { token } = await response.json();
+      console.log("Token recibido:", token);
       authContext.setAuthData(token);
       navigate('/admin-panel');
     } else {
       alert('Login failed!');
+      console.log("Error en el inicio de sesión");
     }
   };
 

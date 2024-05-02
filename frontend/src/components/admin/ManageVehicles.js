@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const ManageVehicles = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -8,16 +8,17 @@ const ManageVehicles = () => {
 
   useEffect(() => {
     const fetchVehicles = async () => {
-      const response = await fetch('/api/vehicles', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setVehicles(data.vehicles);
-      } else {
-        alert("Failed to fetch vehicles");
-      }
-    };
+		const response = await fetch('http://localhost:3001/api/vehicles', {
+		  headers: { 'Authorization': `Bearer ${token}` },
+		});
+		if (response.ok) {
+		  const data = await response.json();
+		  setVehicles(data.vehicles);
+		} else {
+		  const errorText = await response.text(); // Obtén el mensaje de error del cuerpo de la respuesta
+		  alert(`Failed to fetch vehicles: ${errorText}`);
+		}
+	  };
     fetchVehicles();
   }, [token]);
 
@@ -49,7 +50,7 @@ const ManageVehicles = () => {
       const result = await response.json();
       const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...vehicleData } : veh) : [...vehicles, { id: result.id, ...vehicleData }];
       setVehicles(updatedList);
-      setEditingVehicle(null); // Reset editing state
+      setEditingVehicle(null); // Restablecer el estado de edición
     } else {
       alert("Failed to update the vehicle");
     }

@@ -1,46 +1,50 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const router = express.Router();
 const db = require('../database/db');
-const SECRET_KEY = "tu_clave_secreta"; // Deberías almacenarla en una variable de entorno
 
-// Registro de usuario
-router.post('/register', async (req, res) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const sql = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)';
-    const params = [req.body.username, hashedPassword, req.body.role];
-    db.run(sql, params, function(err) {
-      if (err) {
-        res.status(500).send({ error: err.message });
-        return;
-      }
-      res.json({ id: this.lastID });
-    });
-  } catch {
-    res.status(500).send();
-  }
+// Obtener todos los usuarios con manejo de errores mejorado
+router.get('/', (req, res) => {
+  db.all('SELECT * FROM users', [], (err, users) => {
+    if (err) {
+      console.error(`Error al obtener usuarios: ${err.message}`); // Loguear el error en el servidor
+      return res.status(500).json({ error: 'Error al obtener usuarios' }); // Enviar respuesta en JSON
+    }
+    res.json({ users });
+  });
 });
 
-// Login de usuario
-router.post('/login', (req, res) => {
-  const sql = 'SELECT * FROM users WHERE username = ?';
-  db.get(sql, [req.body.username], async (err, user) => {
+// Añadir un nuevo usuario con manejo de errores mejorado
+router.post('/', (req, res) => {
+  const { username, password, role } = req.body;
+  db.run('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', [username, password, role], function(err) {
     if (err) {
-      res.status(500).send({ error: err.message });
-      return;
+      console.error(`Error al añadir usuario: ${err.message}`); // Loguear el error en el servidor
+      return res.status(500).json({ error: 'Error al añadir usuario' }); // Enviar respuesta en JSON
     }
-    if (user) {
-      if (await bcrypt.compare(req.body.password, user.password)) {
-        const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY);
-        res.json({ token: token });
-      } else {
-        res.status(401).send({ error: 'Contraseña incorrecta' });
-      }
-    } else {
-      res.status(404).send({ error: 'Usuario no encontrado' });
+    res.status(201).json({ id: this.lastID });
+  });
+});
+
+// Actualizar un usuario existente con manejo de errores mejorado
+router.put('/:id', (req, res) => {
+  const { username, password, role } = req.body;
+  db.run('UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?', [username, password, role, req.params.id], function(err) {
+    if (err) {
+      console.error(`Error al actualizar usuario: ${err.message}`); // Loguear el error en el servidor
+      return res.status(500).json({ error: 'Error al actualizar usuario' }); // Enviar respuesta en JSON
     }
+    res.json({ message: 'Usuario actualizado', changes: this.changes });
+  });
+});
+
+// Eliminar un usuario con manejo de errores mejorado
+router.delete('/:id', (req, res) => {
+  db.run('DELETE FROM users WHERE id = ?', [req.params.id], function(err) {
+    if (err) {
+      console.error(`Error al eliminar usuario: ${err.message}`); // Loguear el error en el servidor
+      return res.status(500).json({ error: 'Error al eliminar usuario' }); // Enviar respuesta en JSON
+    }
+    res.json({ message: 'Usuario eliminado', changes: this.changes });
   });
 });
 

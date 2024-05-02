@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const ManageEmployees = () => {
   const [employees, setEmployees] = useState([]);
@@ -46,7 +46,7 @@ const ManageEmployees = () => {
     if (response.ok) {
       const updatedList = editingEmployee ? employees.map(emp => emp.id === editingEmployee.id ? { ...emp, ...employeeData } : emp) : [...employees, await response.json()];
       setEmployees(updatedList);
-      setEditingEmployee(null); // Reset editing state
+      setEditingEmployee(null);
     } else {
       alert("Failed to update the employee");
     }

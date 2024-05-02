@@ -10,8 +10,11 @@ import EmployeesPage from './pages/EmployeesPage'; // Asegúrate de que el nombr
 import AdminLogin from './pages/AdminLogin'; // Importa AdminLogin si es necesario.
 import AdminPanel from './pages/AdminPanel'; // Importa AdminPanel si es necesario.
 import NotFoundPage from './pages/NotFoundPage'; // Importa NotFoundPage si es necesario.
-import './styles/App.css';
 import PrivateRoute from './components/PrivateRoute';
+import ManageVehicles from './components/admin/ManageVehicles';
+import ManageEmployees from './components/admin/ManageEmployees';
+import ManageClients from './components/admin/ManageClients';
+import './styles/App.css';
 
 const App = () => {
   return (
@@ -25,6 +28,9 @@ const App = () => {
           <Route path="/employees" element={<EmployeesPage />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin-panel" element={<PrivateRoute><AdminPanel /></PrivateRoute>} />
+          <Route path="/admin/vehicles" element={<PrivateRoute><ManageVehicles /></PrivateRoute>} />
+          <Route path="/admin/employees" element={<PrivateRoute><ManageEmployees /></PrivateRoute>} />
+          <Route path="/admin/clients" element={<PrivateRoute><ManageClients /></PrivateRoute>} />
           <Route path="*" element={<NotFoundPage />} /> {/* Esta ruta captura cualquier URL no definida */}
         </Routes>
         <Footer />

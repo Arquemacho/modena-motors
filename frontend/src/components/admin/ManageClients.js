@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const ManageClients = () => {
   const [clients, setClients] = useState([]);
@@ -27,7 +27,7 @@ const ManageClients = () => {
     const clientData = {
       name: form.name.value,
       email: form.email.value,
-      phone: form.phone.value
+      phone: form.phone.value,
     };
 
     const url = editingClient ? `/api/clients/${editingClient.id}` : '/api/clients';
@@ -46,7 +46,7 @@ const ManageClients = () => {
       const result = await response.json();
       const updatedList = editingClient ? clients.map(cli => cli.id === editingClient.id ? { ...cli, ...clientData } : cli) : [...clients, { id: result.id, ...clientData }];
       setClients(updatedList);
-      setEditingClient(null); // Reset editing state
+      setEditingClient(null); // Restablecer el estado de edición
     } else {
       alert("Failed to update the client");
     }

@@ -8,16 +8,21 @@ const ManageEmployees = () => {
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      const response = await fetch('/api/employees', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setEmployees(data.rows);
-      } else {
-        alert("Failed to fetch employees");
-      }
-    };
+		try {
+		  const response = await fetch('/api/employees', {
+			headers: { 'Authorization': `Bearer ${token}` }
+		  });
+		  if (!response.ok) {
+			const errorText = await response.text(); // Obtiene el mensaje de error del cuerpo de la respuesta
+			throw new Error(`Error ${response.status}: ${errorText}`);
+		  }
+		  const data = await response.json();
+		  setEmployees(data.employees);
+		} catch (error) {
+		  console.error(error);
+		  alert(`Failed to fetch employees: ${error.message}`);
+		}
+	  };
     fetchEmployees();
   }, [token]);
 

@@ -8,31 +8,31 @@ const ManageVehicles = () => {
 
   useEffect(() => {
     const fetchVehicles = async () => {
-		const response = await fetch('http://localhost:3001/api/vehicles', {
-		  headers: { 'Authorization': `Bearer ${token}` },
-		});
-		if (response.ok) {
-		  const data = await response.json();
-		  setVehicles(data.vehicles);
-		} else {
-		  const errorText = await response.text(); // Obtén el mensaje de error del cuerpo de la respuesta
-		  alert(`Failed to fetch vehicles: ${errorText}`);
-		}
-	  };
+      const response = await fetch('/api/vehicles', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setVehicles(data.vehicles);
+      } else {
+        const errorText = await response.text(); // Obtiene el mensaje de error
+        alert(`Failed to fetch vehicles: ${errorText}`);
+      }
+    };
     fetchVehicles();
   }, [token]);
 
   const handleAddOrUpdateVehicle = async (event) => {
     event.preventDefault();
     const form = event.target;
-    const vehicleData = {
-      brand: form.brand.value,
-      model: form.model.value,
-      year: form.year.value,
-      price: form.price.value,
-      description: form.description.value,
-      imageURL: form.imageURL.value
-    };
+
+    const formData = new FormData();
+    formData.append("brand", form.brand.value);
+    formData.append("model", form.model.value);
+    formData.append("year", form.year.value);
+    formData.append("price", form.price.value);
+    formData.append("description", form.description.value);
+    formData.append("image", form.image.files[0]);
 
     const url = editingVehicle ? `/api/vehicles/${editingVehicle.id}` : '/api/vehicles';
     const method = editingVehicle ? 'PUT' : 'POST';
@@ -40,19 +40,19 @@ const ManageVehicles = () => {
     const response = await fetch(url, {
       method: method,
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(vehicleData)
+      body: formData // Usamos FormData para enviar la información del formulario
     });
 
     if (response.ok) {
       const result = await response.json();
-      const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...vehicleData } : veh) : [...vehicles, { id: result.id, ...vehicleData }];
+      const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...result } : veh) : [...vehicles, { id: result.id, ...result }];
       setVehicles(updatedList);
       setEditingVehicle(null); // Restablecer el estado de edición
     } else {
-      alert("Failed to update the vehicle");
+      const errorText = await response.text();
+      alert(`Failed to update the vehicle: ${errorText}`);
     }
   };
 
@@ -81,7 +81,7 @@ const ManageVehicles = () => {
         <input type="number" name="year" defaultValue={editingVehicle ? editingVehicle.year : ''} placeholder="Year" required />
         <input type="number" name="price" defaultValue={editingVehicle ? editingVehicle.price : ''} placeholder="Price" required />
         <textarea name="description" defaultValue={editingVehicle ? editingVehicle.description : ''} placeholder="Description" required />
-        <input type="text" name="imageURL" defaultValue={editingVehicle ? editingVehicle.imageURL : ''} placeholder="Image URL" required />
+        <input type="file" name="image" accept="image/*" required /> {/* Campo para seleccionar la imagen */}
         <button type="submit">{editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}</button>
       </form>
       {vehicles.map(vehicle => (

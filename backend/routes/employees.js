@@ -1,61 +1,73 @@
+// routes/employees.js
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const db = require('../database/db');
+const path = require('path');
 
-// Obtener la lista de empleados con manejo de errores mejorado
+// Configuración de multer para empleados
+const storageEmployees = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/employees/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${req.params.id || Date.now()}-${file.originalname}`);
+  }
+});
+
+const uploadEmployees = multer({ storage: storageEmployees });
+
 router.get('/', (req, res) => {
-  db.all("SELECT * FROM employees", [], (err, rows) => {
+  db.all('SELECT * FROM employees', [], (err, employees) => {
     if (err) {
-      console.error(`Error al obtener empleados: ${err.message}`); // Loguear el error en el servidor
-      return res.status(500).json({ error: 'Error al obtener empleados' }); // Enviar respuesta en JSON
+      console.error(err.message);
+      return res.status(500).json({ error: 'Error al obtener empleados' });
     }
-    res.json({ employees: rows }); // Asegúrate de enviar la respuesta en JSON con una clave clara
+    res.json({ employees });
   });
 });
 
-// Añadir un nuevo empleado con manejo de errores mejorado
-router.post('/', (req, res) => {
-  const { name, position, timeInCompany, imageURL } = req.body;
-  const sql = `INSERT INTO employees (name, position, timeInCompany, imageURL) VALUES (?, ?, ?, ?)`;
-  const params = [name, position, timeInCompany, imageURL];
+router.post('/', uploadEmployees.single('image'), (req, res) => {
+  const { name, position, timeInCompany } = req.body;
+  const imageURL = req.file ? `/uploads/employees/${req.file.filename}` : null;
+
+  db.run(
+    'INSERT INTO employees (name, position, timeInCompany, imageURL) VALUES (?, ?, ?, ?)',
+    [name, position, timeInCompany, imageURL],
+    function(err) {
+      if (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: 'Error al añadir empleado' });
+      }
+      res.status(201).json({ id: this.lastID, name, position, timeInCompany, imageURL });
+    }
+  );
+});
+
+router.put('/:id', uploadEmployees.single('image'), (req, res) => {
+  const { name, position, timeInCompany } = req.body;
+  const imageURL = req.file ? `/uploads/employees/${req.file.filename}` : null;
+
+  const sql = 'UPDATE employees SET name = ?, position = ?, timeInCompany = ?, imageURL = ? WHERE id = ?';
+  const params = [name, position, timeInCompany, imageURL, req.params.id];
+
   db.run(sql, params, function(err) {
     if (err) {
-      console.error(`Error al añadir empleado: ${err.message}`); // Loguear el error en el servidor
-      return res.status(500).json({ error: 'Error al añadir empleado' }); // Enviar respuesta en JSON
+      console.error(err.message);
+      return res.status(500).json({ error: 'Error al actualizar empleado' });
     }
-    res.json({ id: this.lastID }); // Enviar respuesta en JSON
+    res.json({ message: 'Empleado actualizado', changes: this.changes });
   });
 });
 
-// Actualizar la información de un empleado con manejo de errores mejorado
-router.put('/:id', (req, res) => {
-  const { name, position, timeInCompany, imageURL } = req.body;
-  db.run(
-    `UPDATE employees SET name = ?, position = ?, timeInCompany = ?, imageURL = ? WHERE id = ?`,
-    [name, position, timeInCompany, imageURL, req.params.id],
-    function(err) {
-      if (err) {
-        console.error(`Error al actualizar empleado: ${err.message}`); // Loguear el error en el servidor
-        return res.status(400).json({ error: 'Error al actualizar empleado' }); // Enviar respuesta en JSON
-      }
-      res.json({ message: "Empleado actualizado", changes: this.changes });
-    }
-  );
-});
-
-// Eliminar un empleado con manejo de errores mejorado
 router.delete('/:id', (req, res) => {
-  db.run(
-    'DELETE FROM employees WHERE id = ?',
-    req.params.id,
-    function(err) {
-      if (err) {
-        console.error(`Error al eliminar empleado: ${err.message}`); // Loguear el error en el servidor
-        return res.status(400).json({ error: 'Error al eliminar empleado' }); // Enviar respuesta en JSON
-      }
-      res.json({ message: "Empleado eliminado", changes: this.changes });
+  db.run('DELETE FROM employees WHERE id = ?', [req.params.id], function(err) {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Error al eliminar empleado' });
     }
-  );
+    res.json({ message: 'Empleado eliminado', changes: this.changes });
+  });
 });
 
 module.exports = router;

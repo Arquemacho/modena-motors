@@ -4,25 +4,26 @@ import AuthContext from '../../context/AuthContext';
 const ManageEmployees = () => {
   const [employees, setEmployees] = useState([]);
   const [editingEmployee, setEditingEmployee] = useState(null);
+
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchEmployees = async () => {
-		try {
-		  const response = await fetch('/api/employees', {
-			headers: { 'Authorization': `Bearer ${token}` }
-		  });
-		  if (!response.ok) {
-			const errorText = await response.text(); // Obtiene el mensaje de error del cuerpo de la respuesta
-			throw new Error(`Error ${response.status}: ${errorText}`);
-		  }
-		  const data = await response.json();
-		  setEmployees(data.employees);
-		} catch (error) {
-		  console.error(error);
-		  alert(`Failed to fetch employees: ${error.message}`);
-		}
-	  };
+      try {
+        const response = await fetch('/api/employees', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error ${response.status}: ${errorText}`);
+        }
+        const data = await response.json();
+        setEmployees(data.employees);
+      } catch (error) {
+        console.error(error);
+        alert(`Failed to fetch employees: ${error.message}`);
+      }
+    };
     fetchEmployees();
   }, [token]);
 
@@ -33,27 +34,34 @@ const ManageEmployees = () => {
       name: form.name.value,
       position: form.position.value,
       timeInCompany: form.timeInCompany.value,
-      imageURL: form.imageURL.value
+      imageURL: form.imageURL.value,
     };
 
     const url = editingEmployee ? `/api/employees/${editingEmployee.id}` : '/api/employees';
     const method = editingEmployee ? 'PUT' : 'POST';
 
-    const response = await fetch(url, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(employeeData)
-    });
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(employeeData)
+      });
 
-    if (response.ok) {
-      const updatedList = editingEmployee ? employees.map(emp => emp.id === editingEmployee.id ? { ...emp, ...employeeData } : emp) : [...employees, await response.json()];
-      setEmployees(updatedList);
-      setEditingEmployee(null);
-    } else {
-      alert("Failed to update the employee");
+      if (response.ok) {
+        const result = await response.json();
+        const updatedList = editingEmployee ? employees.map(emp => emp.id === editingEmployee.id ? { ...emp, ...employeeData } : emp) : [...employees, result];
+        setEmployees(updatedList);
+        setEditingEmployee(null); // Reset editing state
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to update the employee: ${errorText}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`Error updating employee: ${error.message}`);
     }
   };
 
@@ -62,14 +70,20 @@ const ManageEmployees = () => {
   };
 
   const handleDelete = async (employeeId) => {
-    const response = await fetch(`/api/employees/${employeeId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` },
-    });
-    if (response.ok) {
-      setEmployees(employees.filter(employee => employee.id !== employeeId));
-    } else {
-      alert("Failed to delete the employee");
+    try {
+      const response = await fetch(`/api/employees/${employeeId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (response.ok) {
+        setEmployees(employees.filter(employee => employee.id !== employeeId));
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to delete the employee: ${errorText}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`Error deleting employee: ${error.message}`);
     }
   };
 

@@ -10,15 +10,18 @@ const dbPath = path.join(__dirname, 'database', 'modenaMotors.db');
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {
+  // Tabla de clientes
   db.run(`
-    CREATE TABLE IF NOT EXISTS users (
+    CREATE TABLE IF NOT EXISTS clients (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL,
-      role TEXT NOT NULL
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      phone TEXT NOT NULL,
+      vipStatus BOOLEAN NOT NULL DEFAULT FALSE
     )
   `);
 
+  // Tabla de vehículos
   db.run(`
     CREATE TABLE IF NOT EXISTS vehicles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,6 +34,7 @@ db.serialize(() => {
     )
   `);
 
+  // Tabla de empleados
   db.run(`
     CREATE TABLE IF NOT EXISTS employees (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,12 +55,12 @@ app.use(express.json());
 app.use(cors());
 
 // Importar rutas
-const usersRouter = require('./routes/users');
+const clientsRouter = require('./routes/clients');
 const vehiclesRouter = require('./routes/vehicles');
 const employeesRouter = require('./routes/employees');
 const authRouter = require('./routes/authRoutes');
 
-app.use('/api/users', usersRouter);
+app.use('/api/clients', clientsRouter);
 app.use('/api/vehicles', vehiclesRouter);
 app.use('/api/employees', employeesRouter);
 app.use('/api/auth', authRouter);

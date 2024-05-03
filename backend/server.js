@@ -57,6 +57,7 @@ db.serialize(() => {
 // Middlewares
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Importar rutas
 const clientsRouter = require('./routes/clients');

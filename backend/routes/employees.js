@@ -46,18 +46,34 @@ router.post('/', uploadEmployees.single('image'), (req, res) => {
 
 router.put('/:id', uploadEmployees.single('image'), (req, res) => {
   const { name, position, timeInCompany } = req.body;
-  const imageURL = req.file ? `/uploads/employees/${req.file.filename}` : null;
+  let imageURL = req.file ? `/uploads/employees/${req.file.filename}` : req.body.imageURL;
 
-  const sql = 'UPDATE employees SET name = ?, position = ?, timeInCompany = ?, imageURL = ? WHERE id = ?';
-  const params = [name, position, timeInCompany, imageURL, req.params.id];
+  // Si no se sube una nueva imagen y no se proporciona imageURL en el body, conserva la antigua.
+  if (!req.file && !req.body.imageURL) {
+    db.get('SELECT imageURL FROM employees WHERE id = ?', [req.params.id], (err, row) => {
+      if (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: 'Error al recuperar la imagen existente' });
+      }
+      imageURL = row.imageURL;
+      updateEmployee(imageURL);
+    });
+  } else {
+    updateEmployee(imageURL);
+  }
 
-  db.run(sql, params, function(err) {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: 'Error al actualizar empleado' });
-    }
-    res.json({ message: 'Empleado actualizado', changes: this.changes });
-  });
+  function updateEmployee(imageURL) {
+    const sql = 'UPDATE employees SET name = ?, position = ?, timeInCompany = ?, imageURL = ? WHERE id = ?';
+    const params = [name, position, timeInCompany, imageURL, req.params.id];
+  
+    db.run(sql, params, function(err) {
+      if (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: 'Error al actualizar empleado' });
+      }
+      res.json({ message: 'Empleado actualizado', changes: this.changes, imageURL });
+    });
+  }
 });
 
 router.delete('/:id', (req, res) => {

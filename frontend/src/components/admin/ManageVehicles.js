@@ -7,20 +7,26 @@ const ManageVehicles = () => {
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchVehicles = async () => {
-      const response = await fetch('http://localhost:3001/api/vehicles', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      console.log(response);
-      if (response.ok) {
-        const data = await response.json();
-        setVehicles(data.vehicles);
-      } else {
-        const errorText = await response.text(); // Obtiene el mensaje de error del cuerpo de la respuesta
-        alert(`Failed to fetch vehicles: ${errorText}`);
+    const fetchData = async () => {
+      try {
+        // Cargar vehículos, marcas y categorías con una sola llamada API si es posible, o con múltiples fetch seguidos
+        const vehiclesRes = await fetch('http://localhost:3001/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } });
+        const brandsRes = await fetch('http://localhost:3001/api/brands', { headers: { 'Authorization': `Bearer ${token}` } });
+        const categoriesRes = await fetch('http://localhost:3001/api/categories', { headers: { 'Authorization': `Bearer ${token}` } });
+
+        if (!vehiclesRes.ok || !brandsRes.ok || !categoriesRes.ok) throw new Error('Failed to fetch data');
+        const vehiclesData = await vehiclesRes.json();
+        const brandsData = await brandsRes.json();
+        const categoriesData = await categoriesRes.json();
+
+        setVehicles(vehiclesData.vehicles);
+        setBrands(brandsData.brands);
+        setCategories(categoriesData.categories);
+      } catch (error) {
+        console.error('Fetch error:', error.message);
       }
     };
-    fetchVehicles();
+    fetchData();
   }, [token]);
 
   const handleAddOrUpdateVehicle = async (event) => {
@@ -76,22 +82,16 @@ const ManageVehicles = () => {
   return (
     <div>
       <h1>Gestión de Vehículos</h1>
-      <form onSubmit={handleAddOrUpdateVehicle}>
-        <input type="text" name="brand" defaultValue={editingVehicle ? editingVehicle.brand : ''} placeholder="Brand" required />
-        <input type="text" name="model" defaultValue={editingVehicle ? editingVehicle.model : ''} placeholder="Model" required />
-        <input type="number" name="year" defaultValue={editingVehicle ? editingVehicle.year : ''} placeholder="Year" required />
-        <input type="number" name="price" defaultValue={editingVehicle ? editingVehicle.price : ''} placeholder="Price" required />
-        <textarea name="description" defaultValue={editingVehicle ? editingVehicle.description : ''} placeholder="Description" required />
-        <input type="file" name="image" accept="image/*" required />
-        <button type="submit">{editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}</button>
+      <form onSubmit={handleAddOrUpdateVehicle} encType="multipart/form-data">
+        <select name="brand_id" required onChange={handleInputChange} value={editingVehicle ? editingVehicle.brand_id : ''}>
+          {brands.map(brand => <option key={brand.id} value={brand.id}>{brand.name}</option>)}
+        </select>
+        <select name="category_id" required onChange={handleInputChange} value={editingVehicle ? editingVehicle.category_id : ''}>
+          {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
+        </select>
+        {/* Otros campos */}
       </form>
-      {vehicles.map(vehicle => (
-        <div key={vehicle.id}>
-          <p>{vehicle.brand} {vehicle.model} - {vehicle.year}</p>
-          <button onClick={() => handleEdit(vehicle)}>Edit</button>
-          <button onClick={() => handleDelete(vehicle.id)}>Delete</button>
-        </div>
-      ))}
+      {/* Lista de vehículos */}
     </div>
   );
 };

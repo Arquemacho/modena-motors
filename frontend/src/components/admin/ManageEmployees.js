@@ -4,57 +4,70 @@ import AuthContext from '../../context/AuthContext';
 const ManageEmployees = () => {
   const [employees, setEmployees] = useState([]);
   const [editingEmployee, setEditingEmployee] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    position: '',
+    timeInCompany: '',
+    image: null
+  });
 
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/employees', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Error ${response.status}: ${errorText}`);
-        }
+      const response = await fetch('http://localhost:3001/api/employees', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
         const data = await response.json();
         setEmployees(data.employees);
-      } catch (error) {
-        console.error(error);
-        alert(`Failed to fetch employees: ${error.message}`);
+      } else {
+        const errorText = await response.text();
+        alert(`Failed to fetch employees: ${errorText}`);
       }
     };
     fetchEmployees();
   }, [token]);
 
-  const handleAddOrUpdateEmployee = async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const employeeData = {
-      name: form.name.value,
-      position: form.position.value,
-      timeInCompany: form.timeInCompany.value,
-      imageURL: form.imageURL.value,
-    };
+  const handleChange = (e) => {
+    if (e.target.name === "image") {
+      setFormData({...formData, image: e.target.files[0]});
+    } else {
+      setFormData({...formData, [e.target.name]: e.target.value});
+    }
+  };
 
-    const url = editingEmployee ? `http://localhost:3001/api/employees/${editingEmployee.id}` : '/api/employees';
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('position', formData.position);
+    data.append('timeInCompany', formData.timeInCompany);
+    if (formData.image) {
+      data.append('image', formData.image);
+    } else if (editingEmployee && !formData.image && editingEmployee.imageURL) {
+      // Ensure the imageURL is not overwritten if not updating the image
+      data.append('imageURL', editingEmployee.imageURL);
+    }
+
+    const url = editingEmployee ? `http://localhost:3001/api/employees/${editingEmployee.id}` : 'http://localhost:3001/api/employees';
     const method = editingEmployee ? 'PUT' : 'POST';
 
     try {
       const response = await fetch(url, {
-        method,
+        method: method,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
         },
-        body: JSON.stringify(employeeData)
+        body: data
       });
 
       if (response.ok) {
         const result = await response.json();
-        const updatedList = editingEmployee ? employees.map(emp => emp.id === editingEmployee.id ? { ...emp, ...employeeData } : emp) : [...employees, result];
+        const updatedList = editingEmployee ? employees.map(emp => emp.id === editingEmployee.id ? {...emp, ...result, imageURL: result.imageURL || emp.imageURL} : emp) : [...employees, result];
         setEmployees(updatedList);
-        setEditingEmployee(null); // Reset editing state
+        clearForm();
       } else {
         const errorText = await response.text();
         alert(`Failed to update the employee: ${errorText}`);
@@ -65,37 +78,48 @@ const ManageEmployees = () => {
     }
   };
 
+  const clearForm = () => {
+    setEditingEmployee(null);
+    setFormData({
+      name: '',
+      position: '',
+      timeInCompany: '',
+      image: null
+    });
+  };
+
   const handleEdit = (employee) => {
     setEditingEmployee(employee);
+    setFormData({
+      name: employee.name,
+      position: employee.position,
+      timeInCompany: employee.timeInCompany,
+      image: null
+    });
   };
 
   const handleDelete = async (employeeId) => {
-    try {
-      const response = await fetch(`http://localhost:3001/api/employees/${employeeId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      if (response.ok) {
-        setEmployees(employees.filter(employee => employee.id !== employeeId));
-      } else {
-        const errorText = await response.text();
-        alert(`Failed to delete the employee: ${errorText}`);
-      }
-    } catch (error) {
-      console.error(error);
-      alert(`Error deleting employee: ${error.message}`);
+    const response = await fetch(`http://localhost:3001/api/employees/${employeeId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (response.ok) {
+      setEmployees(employees.filter(emp => emp.id !== employeeId));
+    } else {
+      const errorText = await response.text();
+      alert(`Failed to delete the employee: ${errorText}`);
     }
   };
 
   return (
     <div>
       <h1>Gestión de Empleados</h1>
-      <form onSubmit={handleAddOrUpdateEmployee}>
-        <input type="text" name="name" defaultValue={editingEmployee ? editingEmployee.name : ''} placeholder="Name" required />
-        <input type="text" name="position" defaultValue={editingEmployee ? editingEmployee.position : ''} placeholder="Position" required />
-        <input type="number" name="timeInCompany" defaultValue={editingEmployee ? editingEmployee.timeInCompany : ''} placeholder="Years in Company" required />
-        <input type="text" name="imageURL" defaultValue={editingEmployee ? editingEmployee.imageURL : ''} placeholder="Image URL" required />
-        <button type="submit">{editingEmployee ? 'Update' : 'Add'}</button>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" required />
+        <input type="text" name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
+        <input type="number" name="timeInCompany" value={formData.timeInCompany} onChange={handleChange} placeholder="Years in Company" required />
+        <input type="file" name="image" onChange={handleChange} accept="image/*" />
+        <button type="submit">{editingEmployee ? 'Update Employee' : 'Add Employee'}</button>
       </form>
       {employees.map(employee => (
         <div key={employee.id}>

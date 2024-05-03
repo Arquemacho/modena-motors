@@ -1,52 +1,25 @@
-import React from 'react';
-import '../styles/EmployeesPage.css'; // Asegúrate de tener este archivo CSS
+import React, { useState, useEffect } from 'react';
+import '../styles/EmployeesPage.css';
 
 const EmployeesPage = () => {
-  const employees = [
-    {
-      id: 1,
-      name: "Diego Papasito",
-      image: "/images/johndoe.jpg",
-      position: "Dueno de mi Corazon",
-      years: 5
-    },
-	{
-		id: 2,
-		name: "Diego Churrasco",
-		image: "/images/johndoe.jpg",
-		position: "Todos somos Diego",
-		years: 4
-	  },
-	  {
-		id: 3,
-		name: "Diego",
-		image: "/images/johndoe.jpg",
-		position: "Todos somos Diego",
-		years: 3
-	  },
-	  {
-		  id: 4,
-		  name: "Diego  hotdog",
-		  image: "/images/johndoe.jpg",
-		  position: "Todos somos Diego",
-		  years: 2
-		},
-		{
-			id: 5,
-			name: "Diego daddy",
-			image: "/images/johndoe.jpg",
-			position: "Todos somos Diego",
-			years: 1
-		  },
-		  {
-			  id: 6,
-			  name: "Diego Mi amor",
-			  image: "/images/johndoe.jpg",
-			  position: "Todos somos Diego",
-			  years: 6
-			}
-    // Agrega más empleados aquí según sea necesario
-  ];
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/employees');
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
+        const data = await response.json();
+        setEmployees(data.employees);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
 
   return (
     <div className="employees-page">
@@ -54,10 +27,10 @@ const EmployeesPage = () => {
       <div className="employee-gallery">
         {employees.map(employee => (
           <div key={employee.id} className="employee-card">
-            <img src={employee.image} alt={employee.name} />
+            <img src={`http://localhost:3001${employee.imageURL}`} alt={employee.name} onError={(e) => { e.target.onerror = null; e.target.src = '/images/default.jpg'; }} />
             <h2>{employee.name}</h2>
             <p>Cargo: {employee.position}</p>
-            <p>Tiempo en la empresa: {employee.years} años</p>
+            <p>Tiempo en la empresa: {employee.timeInCompany} años</p>
           </div>
         ))}
       </div>

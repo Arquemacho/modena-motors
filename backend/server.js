@@ -71,21 +71,25 @@ CREATE TABLE IF NOT EXISTS categories (
   console.log('Tablas creadas con éxito');
 });
 
-// Middlewares
-app.use(express.json());
-app.use(cors());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 // Importar rutas
 const clientsRouter = require('./routes/clients');
 const vehiclesRouter = require('./routes/vehicles');
 const employeesRouter = require('./routes/employees');
 const authRouter = require('./routes/authRoutes');
+const brandsRouter = require('./routes/brands');  // Nuevo
+const categoriesRouter = require('./routes/categories');  // Nuevo
+
+// Middlewares
+app.use(express.json());
+app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/clients', clientsRouter);
 app.use('/api/vehicles', vehiclesRouter);
 app.use('/api/employees', employeesRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/brands', brandsRouter);  // Nuevo
+app.use('/api/categories', categoriesRouter);  // Nuevo
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

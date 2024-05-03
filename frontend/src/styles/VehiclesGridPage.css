@@ -1,20 +1,28 @@
 .vehicles-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en múltiples líneas */
+  justify-content: center; /* Centrar los elementos horizontalmente */
+  gap: 20px; /* Espacio entre los elementos */
+  padding: 20px;
 }
 
 .vehicle-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow: hidden;
+  flex: 1 1 calc(33.33% - 20px); /* Establecer el ancho de cada tarjeta */
+  margin-bottom: 20px; /* Espacio entre las filas */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.vehicle-card .vehicle-image {
+  width: 100%; /* Ajustar el ancho de la imagen al 100% del contenedor */
+  height: auto; /* Permitir que la altura se ajuste automáticamente */
 }
 
 .vehicle-card h3 {
-    margin: 10px;
+  margin: 10px;
 }
 
 .vehicle-card p {
-    margin: 0 10px 10px;
+  margin: 0 10px 10px;
 }

@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import VehicleCard from '../components/VehicleCard'; // Asegúrate de tener este componente
+import VehicleCard from '../components/VehicleCard';
+import '../styles/VehiclesGridPage.css';
 
 const VehiclesGridPage = () => {
   const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
-    // Aquí iría el código para obtener los vehículos del backend
-    // setVehicles(fetchVehicles());
+    const fetchVehicles = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/vehicles');
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
+        const data = await response.json();
+        setVehicles(data.vehicles);
+      } catch (error) {
+        console.error('Error fetching vehicles:', error);
+      }
+    };
+
+    fetchVehicles();
   }, []);
 
   return (

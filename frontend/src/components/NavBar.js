@@ -25,7 +25,7 @@ const NavBar = () => {
                 <li><Link to="/vehicles/brand/Porsche">Porsche</Link></li>
               </ul>
             </li>
-            <li><Link to="/vehicles/all" className="dropdown-link">Ver Todos</Link></li>
+            <li><Link to="/vehicles" className="dropdown-link">Ver Todos</Link></li>
           </ul>
         </li>
         <li className="nav-item"><Link to="/employees" className="nav-link">Colaboradores</Link></li>

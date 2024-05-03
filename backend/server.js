@@ -7,7 +7,13 @@ const PORT = process.env.PORT || 3001;
 
 // Ruta de la base de datos
 const dbPath = path.join(__dirname, 'database', 'modenaMotors.db');
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('Could not connect to the database', err);
+  } else {
+    console.log('Connected to database');
+  }
+});
 
 db.serialize(() => {
   // Tabla de clientes
@@ -47,8 +53,6 @@ db.serialize(() => {
 
   console.log('Tablas creadas con éxito');
 });
-
-db.close();
 
 // Middlewares
 app.use(express.json());

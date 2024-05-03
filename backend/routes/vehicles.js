@@ -18,14 +18,16 @@ const storageVehicles = multer.diskStorage({
 const uploadVehicles = multer({ storage: storageVehicles });
 
 router.get('/', (req, res) => {
-  db.all('SELECT * FROM vehicles', [], (err, vehicles) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: 'Error al obtener vehículos' });
-    }
-    res.json({ vehicles });
+	db.all('SELECT * FROM vehicles', [], (err, vehicles) => {
+	  if (err) {
+		console.error(err.message);
+		res.status(500).json({ error: 'Error al obtener vehículos' });
+	  } else {
+		res.json({ vehicles });
+	  }
+	});
   });
-});
+  
 
 router.get('/:id', (req, res) => {
   db.get('SELECT * FROM vehicles WHERE id = ?', [req.params.id], (err, vehicle) => {

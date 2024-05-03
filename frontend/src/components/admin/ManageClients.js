@@ -9,9 +9,10 @@ const ManageClients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await fetch('/api/clients', {
+        const response = await fetch('http://localhost:3001/api/clients', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
+		console.log(response);
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`Error ${response.status}: ${errorText}`);
@@ -36,7 +37,7 @@ const ManageClients = () => {
       vipStatus: form.vipStatus.checked,
     };
 
-    const url = editingClient ? `/api/clients/${editingClient.id}` : '/api/clients';
+    const url = editingClient ? `http://localhost:3001/api/clients/${editingClient.id}` : '/api/clients';
     const method = editingClient ? 'PUT' : 'POST';
 
     try {
@@ -70,7 +71,7 @@ const ManageClients = () => {
 
   const handleDelete = async (clientId) => {
     try {
-      const response = await fetch(`/api/clients/${clientId}`, {
+      const response = await fetch(`http://localhost:3001/api/clients/${clientId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });

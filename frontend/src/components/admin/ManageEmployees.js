@@ -10,7 +10,7 @@ const ManageEmployees = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch('/api/employees', {
+        const response = await fetch('http://localhost:3001/api/employees', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {
@@ -37,7 +37,7 @@ const ManageEmployees = () => {
       imageURL: form.imageURL.value,
     };
 
-    const url = editingEmployee ? `/api/employees/${editingEmployee.id}` : '/api/employees';
+    const url = editingEmployee ? `http://localhost:3001/api/employees/${editingEmployee.id}` : '/api/employees';
     const method = editingEmployee ? 'PUT' : 'POST';
 
     try {
@@ -71,7 +71,7 @@ const ManageEmployees = () => {
 
   const handleDelete = async (employeeId) => {
     try {
-      const response = await fetch(`/api/employees/${employeeId}`, {
+      const response = await fetch(`http://localhost:3001/api/employees/${employeeId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });

@@ -8,14 +8,15 @@ const ManageVehicles = () => {
 
   useEffect(() => {
     const fetchVehicles = async () => {
-      const response = await fetch('/api/vehicles', {
+      const response = await fetch('http://localhost:3001/api/vehicles', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      console.log(response);
       if (response.ok) {
         const data = await response.json();
         setVehicles(data.vehicles);
       } else {
-        const errorText = await response.text(); // Obtiene el mensaje de error
+        const errorText = await response.text(); // Obtiene el mensaje de error del cuerpo de la respuesta
         alert(`Failed to fetch vehicles: ${errorText}`);
       }
     };
@@ -25,7 +26,6 @@ const ManageVehicles = () => {
   const handleAddOrUpdateVehicle = async (event) => {
     event.preventDefault();
     const form = event.target;
-
     const formData = new FormData();
     formData.append("brand", form.brand.value);
     formData.append("model", form.model.value);
@@ -34,7 +34,7 @@ const ManageVehicles = () => {
     formData.append("description", form.description.value);
     formData.append("image", form.image.files[0]);
 
-    const url = editingVehicle ? `/api/vehicles/${editingVehicle.id}` : '/api/vehicles';
+    const url = editingVehicle ? `http://localhost:3001/api/vehicles/${editingVehicle.id}` : '/api/vehicles';
     const method = editingVehicle ? 'PUT' : 'POST';
 
     const response = await fetch(url, {
@@ -47,7 +47,7 @@ const ManageVehicles = () => {
 
     if (response.ok) {
       const result = await response.json();
-      const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...result } : veh) : [...vehicles, { id: result.id, ...result }];
+      const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...result } : veh) : [...vehicles, { ...result }];
       setVehicles(updatedList);
       setEditingVehicle(null); // Restablecer el estado de edición
     } else {
@@ -61,14 +61,15 @@ const ManageVehicles = () => {
   };
 
   const handleDelete = async (vehicleId) => {
-    const response = await fetch(`/api/vehicles/${vehicleId}`, {
+    const response = await fetch(`http://localhost:3001/api/vehicles/${vehicleId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` },
     });
     if (response.ok) {
       setVehicles(vehicles.filter(vehicle => vehicle.id !== vehicleId));
     } else {
-      alert("Failed to delete the vehicle");
+      const errorText = await response.text();
+      alert(`Failed to delete the vehicle: ${errorText}`);
     }
   };
 
@@ -81,7 +82,7 @@ const ManageVehicles = () => {
         <input type="number" name="year" defaultValue={editingVehicle ? editingVehicle.year : ''} placeholder="Year" required />
         <input type="number" name="price" defaultValue={editingVehicle ? editingVehicle.price : ''} placeholder="Price" required />
         <textarea name="description" defaultValue={editingVehicle ? editingVehicle.description : ''} placeholder="Description" required />
-        <input type="file" name="image" accept="image/*" required /> {/* Campo para seleccionar la imagen */}
+        <input type="file" name="image" accept="image/*" required />
         <button type="submit">{editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}</button>
       </form>
       {vehicles.map(vehicle => (

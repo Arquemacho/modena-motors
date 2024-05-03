@@ -26,18 +26,35 @@ db.serialize(() => {
       vipStatus BOOLEAN NOT NULL DEFAULT FALSE
     )
   `);
+  db.run(`
+CREATE TABLE IF NOT EXISTS brands (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL
+    );
+    `);
+
+  db.run(`
+CREATE TABLE IF NOT EXISTS categories (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL
+    );
+    `);
 
   // Tabla de vehículos
   db.run(`
     CREATE TABLE IF NOT EXISTS vehicles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      brand TEXT NOT NULL,
+      brand_id INTEGER NOT NULL,
+      category_id INTEGER NOT NULL,
       model TEXT NOT NULL,
       year INTEGER NOT NULL,
       price DECIMAL NOT NULL,
       description TEXT,
-      imageURL TEXT
-    )
+      imageURL TEXT,
+      FOREIGN KEY (brand_id) REFERENCES brands(id),
+      FOREIGN KEY (category_id) REFERENCES categories(id)
+    );
+
   `);
 
   // Tabla de empleados

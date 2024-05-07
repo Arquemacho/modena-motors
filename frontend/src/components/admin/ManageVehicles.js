@@ -34,7 +34,10 @@ const ManageVehicles = () => {
     event.preventDefault();
     const form = event.target;
     const formData = new FormData();
-    formData.append('brand', brands.find(brand => brand.id === parseInt(form.brand_id.value)).name); // Modificación aquí    formData.append('category_id', form.category_id.value);
+
+    // Append form data correctly
+    formData.append('brand_id', form.brand_id.value);
+    formData.append('category_id', form.category_id.value);
     formData.append('model', form.model.value);
     formData.append('year', form.year.value);
     formData.append('price', form.price.value);
@@ -48,7 +51,8 @@ const ManageVehicles = () => {
       const response = await fetch(url, {
         method: method,
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
         },
         body: formData
       });
@@ -57,7 +61,7 @@ const ManageVehicles = () => {
         const result = await response.json();
         const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...result } : veh) : [...vehicles, result];
         setVehicles(updatedList);
-        setEditingVehicle(null); // Reset editing state
+        setEditingVehicle(null);  // Reset editing state
       } else {
         const errorText = await response.text();
         alert(`Failed to update the vehicle: ${errorText}`);
@@ -87,33 +91,45 @@ const ManageVehicles = () => {
   return (
     <div>
       <h1>Gestión de Vehículos</h1>
-      <form onSubmit={handleAddOrUpdateVehicle} encType="multipart/form-data">
-        <select name="brand_id" required defaultValue={editingVehicle ? editingVehicle.brand_id : ''}>
-          {brands.map(brand => (
-            <option key={brand.id} value={brand.id}>{brand.name}</option>
-          ))}
-        </select>
-        <select name="category_id" required defaultValue={editingVehicle ? editingVehicle.category_id : ''}>
-          {categories.map(category => (
-            <option key={category.id} value={category.id}>{category.name}</option>
-          ))}
-        </select>
-        <input type="text" name="model" defaultValue={editingVehicle ? editingVehicle.model : ''} placeholder="Model" required />
-        <input type="number" name="year" defaultValue={editingVehicle ? editingVehicle.year : ''} placeholder="Year" required />
-        <input type="number" name="price" defaultValue={editingVehicle ? editingVehicle.price : ''} placeholder="Price" required />
-        <textarea name="description" defaultValue={editingVehicle ? editingVehicle.description : ''} placeholder="Description" required />
-        <input type="file" name="image" accept="image/*" />
-        <button type="submit">{editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}</button>
-      </form>
-      {vehicles.map(vehicle => (
-        <div key={vehicle.id}>
-          <p>{vehicle.brand} {vehicle.model} - {vehicle.year}</p>
-          <button onClick={() => handleEdit(vehicle)}>Edit</button>
-          <button onClick={() => handleDelete(vehicle.id)}>Delete</button>
-        </div>
-      ))}
-    </div>
-  );
+<form onSubmit={handleAddOrUpdateVehicle} encType="multipart/form-data">
+<div>
+<label>
+Marca:
+<select name="brand_id" required defaultValue={editingVehicle ? editingVehicle.brand_id : ''}>
+<option value="">Seleccione una Marca</option>
+{brands.map(brand => (
+<option key={brand.id} value={brand.id}>{brand.name}</option>
+))}
+</select>
+</label>
+<label>
+Categoría:
+<select name="category_id" required defaultValue={editingVehicle ? editingVehicle.category_id : ''}>
+<option value="">Seleccione una Categoría</option>
+{categories.map(category => (
+<option key={category.id} value={category.id}>{category.name}</option>
+))}
+</select>
+</label>
+</div>
+<input type="text" name="model" defaultValue={editingVehicle ? editingVehicle.model : ''} placeholder="Modelo" required />
+<input type="number" name="year" defaultValue={editingVehicle ? editingVehicle.year : ''} placeholder="Año" required />
+<input type="number" name="price" defaultValue={editingVehicle ? editingVehicle.price : ''} placeholder="Precio" required />
+<textarea name="description" defaultValue={editingVehicle ? editingVehicle.description : ''} placeholder="Descripción" required />
+<input type="file" name="image" accept="image/*" />
+<button type="submit">{editingVehicle ? 'Actualizar Vehículo' : 'Agregar Vehículo'}</button>
+</form>
+<div>
+{vehicles.map(vehicle => (
+<div key={vehicle.id}>
+<p>{vehicle.brand} {vehicle.model} - {vehicle.year}</p>
+<button onClick={() => handleEdit(vehicle)}>Editar</button>
+<button onClick={() => handleDelete(vehicle.id)}>Eliminar</button>
+</div>
+))}
+</div>
+</div>
+);
 };
 
 export default ManageVehicles;

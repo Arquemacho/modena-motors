@@ -43,29 +43,31 @@ router.get('/:id', (req, res) => {
   });
 });
 
+// Agregar un vehículo
 router.post('/', uploadVehicles.single('image'), (req, res) => {
-  const { brand, model, year, price, description } = req.body;
+  const { brand_id, category_id, model, year, price, description } = req.body;
   const imageURL = req.file ? `/uploads/vehicles/${req.file.filename}` : null;
 
   db.run(
-    'INSERT INTO vehicles (brand, model, year, price, description, imageURL) VALUES (?, ?, ?, ?, ?, ?)',
-    [brand, model, year, price, description, imageURL],
+    'INSERT INTO vehicles (brand_id, category_id, model, year, price, description, imageURL) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [brand_id, category_id, model, year, price, description, imageURL],
     function(err) {
       if (err) {
         console.error(err.message);
         return res.status(500).json({ error: 'Error al añadir vehículo' });
       }
-      res.status(201).json({ id: this.lastID, brand, model, year, price, description, imageURL });
+      res.status(201).json({ id: this.lastID, brand_id, category_id, model, year, price, description, imageURL });
     }
   );
 });
 
+// Actualizar un vehículo
 router.put('/:id', uploadVehicles.single('image'), (req, res) => {
-  const { brand, model, year, price, description } = req.body;
-  const imageURL = req.file ? `/uploads/vehicles/${req.file.filename}` : null;
+  const { brand_id, category_id, model, year, price, description } = req.body;
+  const imageURL = req.file ? `/uploads/vehicles/${req.file.filename}` : req.body.imageURL; // Mantén imageURL si no hay nueva imagen
 
-  const sql = 'UPDATE vehicles SET brand = ?, model = ?, year = ?, price = ?, description = ?, imageURL = ? WHERE id = ?';
-  const params = [brand, model, year, price, description, imageURL, req.params.id];
+  const sql = 'UPDATE vehicles SET brand_id = ?, category_id = ?, model = ?, year = ?, price = ?, description = ?, imageURL = ? WHERE id = ?';
+  const params = [brand_id, category_id, model, year, price, description, imageURL, req.params.id];
 
   db.run(sql, params, function(err) {
     if (err) {

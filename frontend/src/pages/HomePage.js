@@ -88,7 +88,7 @@ const HomePage = () => {
             <Testimonials testimonials={testimonials}/>
             <LaunchAnnouncements announcements={launches}/>
             <div className="full-catalogue-link" data-aos="zoom-in">
-                <Link to="/vehicles/all" className="explore-all-button">Explora Todos Nuestros Modelos</Link>
+                <Link to="/vehicles/" className="explore-all-button">Explora Todos Nuestros Modelos</Link>
             </div>
         </main>
     );

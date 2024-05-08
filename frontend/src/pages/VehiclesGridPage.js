@@ -107,71 +107,82 @@ const VehiclesGridPage = () => {
     setSelectedVehicle(vehicle);
   };
 
+  const handleBrandChange = (event) => {
+	const brandId = parseInt(event.target.value);
+	if (event.target.checked) {
+	  setSelectedBrands([...selectedBrands, brandId]);
+	} else {
+	  setSelectedBrands(selectedBrands.filter(id => id !== brandId));
+	}
+  };
+  
+  const handleCategoryChange = (event) => {
+	const categoryId = parseInt(event.target.value);
+	if (event.target.checked) {
+	  setSelectedCategories([...selectedCategories, categoryId]);
+	} else {
+	  setSelectedCategories(selectedCategories.filter(id => id !== categoryId));
+	}
+  };
+
   return (
-    <div className="container">
-      <div className="sidebar">
-        <div className="filters-container">
-          <div className="filter-header">Filtrar por Marca:</div>
-          <select className="filter-dropdown" onChange={handleCheckboxChange}>
-            <option value="">Todas las marcas</option>
-            {brands.map(brand => (
-              <option key={brand.id} value={brand.id}>{brand.name}</option>
-            ))}
-          </select>
-
-          <div className="filter-header">Filtrar por Categoría:</div>
-          <select className="filter-dropdown" onChange={handleCheckboxChange}>
-            <option value="">Todas las categorías</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
-          </select>
-
-          <div className="filter-header">Rango de Precios:</div>
-          <input type="number" className="filter-dropdown" placeholder="Precio mínimo" value={minPrice} onChange={e => setMinPrice(e.target.value)} />
-          <input type="number" className="filter-dropdown" placeholder="Precio máximo" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} />
-
-          <div className="filter-header">Rango de Años:</div>
-          <input type="number" className="filter-dropdown" placeholder="Año mínimo" value={minYear} onChange={e => setMinYear(e.target.value)} />
-          <input type="number" className="filter-dropdown" placeholder="Año máximo" value={maxYear} onChange={e => setMaxYear(e.target.value)} />
-        </div>
-      </div>
-      <div className="main-content">
-        <div className="search-and-sort-container">
-          <input
-            className="search-input"       type="text"
-      placeholder="Buscar por marca, modelo o año..."
-      value={searchTerm}
-      onChange={handleSearchChange}
-    />
-    <select
-      className="sort-select"
-      onChange={handleSortChange}
-      value={sortKey}
-    >
-      <option value="">Ordenar por</option>
-      <option value="priceAsc">Precio Ascendente</option>
-      <option value="priceDesc">Precio Descendente</option>
-      <option value="yearAsc">Año Ascendente</option>
-      <option value="yearDesc">Año Descendente</option>
-    </select>
-  </div>
-  <div className="vehicles-grid">
-    {filteredVehicles.map(vehicle => (
-      <VehicleCard key={vehicle.id} vehicle={vehicle} onClick={() => openModal(vehicle)} />
-    ))}
-  </div>
-  {selectedVehicle && (
-    <VehicleDetailsModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />
-  )}
-  {showScrollButton && (
-    <button className="scroll-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-      ↑ Subir
-    </button>
-  )}
-</div>
-</div>
-);
+	<div className="container">
+	  <div className="sidebar">
+		<div className="filters-container">
+		  <h4>Filtrar por Marca:</h4>
+		  {brands.map(brand => (
+			<div key={brand.id} className="filter-checkbox">
+			  <input
+				type="checkbox"
+				id={`brand-${brand.id}`}
+				value={brand.id}
+				checked={selectedBrands.includes(brand.id)}
+				onChange={handleBrandChange}
+			  />
+			  <label htmlFor={`brand-${brand.id}`}>{brand.name}</label>
+			</div>
+		  ))}
+  
+		  <h4>Filtrar por Categoría:</h4>
+		  {categories.map(category => (
+			<div key={category.id} className="filter-checkbox">
+			  <input
+				type="checkbox"
+				id={`category-${category.id}`}
+				value={category.id}
+				checked={selectedCategories.includes(category.id)}
+				onChange={handleCategoryChange}
+			  />
+			  <label htmlFor={`category-${category.id}`}>{category.name}</label>
+			</div>
+		  ))}
+  
+		  <h4>Rango de Precios:</h4>
+		  <input type="number" placeholder="Precio mínimo" value={minPrice} onChange={e => setMinPrice(e.target.value)} />
+		  <input type="number" placeholder="Precio máximo" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} />
+  
+		  <h4>Rango de Años:</h4>
+		  <input type="number" placeholder="Año mínimo" value={minYear} onChange={e => setMinYear(e.target.value)} />
+		  <input type="number" placeholder="Año máximo" value={maxYear} onChange={e => setMaxYear(e.target.value)} />
+		</div>
+	  </div>
+	  <div className="main-content">
+		<input type="text" placeholder="Buscar por marca, modelo o año..." value={searchTerm} onChange={handleSearchChange} />
+		<select onChange={handleSortChange} value={sortKey}>
+		  <option value="">Ordenar por</option>
+		  <option value="priceAsc">Precio Ascendente</option>
+		  <option value="priceDesc">Precio Descendente</option>
+		  <option value="yearAsc">Año Ascendente</option>
+		  <option value="yearDesc">Año Descendente</option>
+		</select>
+		<div className="vehicles-grid">
+		  {filteredVehicles.map(vehicle => <VehicleCard key={vehicle.id} vehicle={vehicle} onClick={() => openModal(vehicle)} />)}
+		</div>
+		{selectedVehicle && <VehicleDetailsModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />}
+		{showScrollButton && <button className="scroll-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑ Subir</button>}
+	  </div>
+	</div>
+  );
 
 
 };

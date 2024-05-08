@@ -21,6 +21,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <NavBar />
+		<div className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about-us" element={<AboutUsPage />} />
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/admin/clients" element={<PrivateRoute><ManageClients /></PrivateRoute>} />
           <Route path="*" element={<NotFoundPage />} /> {/* Esta ruta captura cualquier URL no definida */}
         </Routes>
+		</div>
         <Footer />
       </AuthProvider>
     </Router>

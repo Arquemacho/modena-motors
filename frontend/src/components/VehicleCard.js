@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/VehicleCard.css';
 
-const VehicleCard = ({ vehicle }) => {
+const VehicleCard = ({ vehicle, onClick }) => {
   const { imageURL, brand, model, year, description, price } = vehicle;
 
   return (
@@ -12,7 +12,7 @@ const VehicleCard = ({ vehicle }) => {
         <p className="vehicle-year">{year}</p>
         <p className="vehicle-price">{`Precio: $${price ? price.toLocaleString() : 'Desconocido'}`}</p>
         <p className="vehicle-description">{description}</p>
-        <button className="vehicle-more-info">Ver Más</button>
+        <button className="vehicle-more-info" onClick={() => onClick(vehicle)}>Ver Más</button>
       </div>
     </div>
   );

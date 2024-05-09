@@ -31,11 +31,39 @@ const HomePage = () => {
     ];
 
 
-    const [featuredModels, setFeaturedModels] = useState([
-        // Dummy data for featured models
-        { id: 1, imageUrl: '/images/hero.jpg', name: "Model 1", description: "Description 1" },
-        { id: 2, imageUrl: "/images/hero.jpg", name: "Model 2", description: "Description 2" }
-    ]);
+    const [featuredModels, setFeaturedModels] = useState([]);
+
+    useEffect(() => {
+        const fetchFeaturedModels = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/vehicles'); // Asume que tienes una ruta así configurada en tu API
+                const brandResponse = await fetch('http://localhost:3001/api/brands');
+                const categoryResponse = await fetch('http://localhost:3001/api/categories');
+
+                if (!vehicleResponse.ok || !brandResponse.ok || !categoryResponse.ok) throw new Error('Failed to fetch');
+
+              const vehicleData = await vehicleResponse.json();
+              const brandsData = await brandResponse.json();
+              const categoriesData = await categoryResponse.json();
+
+              const brandsMap = brandsData.brands.reduce((acc, brand) => ({ ...acc, [brand.id]: brand }), {});
+              const categoriesMap = categoriesData.categories.reduce((acc, category) => ({ ...acc, [category.id]: category }), {});
+
+              const enrichedVehicles = vehicleData.vehicles.map(vehicle => ({
+                ...vehicle,
+                brand: brandsMap[vehicle.brand_id],
+                category: categoriesMap[vehicle.category_id]
+              }));
+              console.log(enrichedVehicles);
+
+              setFeaturedModels(enrichedVehicles);
+            } catch (error) {
+                console.error('Error fetching featured models:', error);
+            }
+        };
+
+        fetchFeaturedModels();
+    }, []);
 
     const [testimonials, setTestimonials] = useState([
         // Dummy data for testimonials

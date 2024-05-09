@@ -41,12 +41,6 @@
     color: #666666;
 }
 
-/* Asegúrate de que las flechas estén visibles y estilizadas adecuadamente */
-.slick-prev:before, .slick-next:before {
-	color: #d80000; /* O el color que prefieras */
-    font-size: 24px;
-  }
-
   .model-more-info {
 	padding: 10px 20px;
 	background-color: #d80000;
@@ -77,28 +71,6 @@
     margin: 0 -15px; /* Ajuste negativo para compensar los márgenes extra de slick-slide */
 }
 
-/* Asegurarte de que los controles no interfieran visualmente */
-.slick-prev, .slick-next {
-  width: 20px;
-  height: 20px;
-  border: none;
-  top: 50%;
-  transform: translate(0, -50%);
-  background-color: transparent;
-  color: #d80000;
-  z-index: 9;
-}
-
-.slick-prev {
-  left: -30px; /* Ajusta esta cantidad para mover la flecha más a la izquierda */
-}
-
-.slick-next {
-  right: -30px; /* Ajusta esta cantidad para mover la flecha más a la derecha */
-}
-
-
-
 /* Estilos para el botón 'Ver Más' de cada modelo */
 .model-more-info {
   padding: 10px 20px;
@@ -123,17 +95,31 @@
 }
 
 .custom-arrow {
-  width: 30px; /* Ajusta el tamaño de las flechas */
-  height: 30px;
-  background-color: #ccc; /* Color de fondo de las flechas */
-  border-radius: 15px; /* Hacer las flechas redondas */
-  color: #d80000; /* Color del ícono de las flechas */
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #d80000;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .custom-arrow:hover {
-  background-color: #d80000; /* Color de fondo al hacer hover */
-  color: white;
+    background-color: #ff0000;
+    transform: scale(1.1);
 }
+
+.slick-prev {
+    left: 10px;
+}
+
+.slick-next {
+    right: 10px;
+}
+
 
 @media (max-width: 768px) {
   .featured-models-container .slick-slide {

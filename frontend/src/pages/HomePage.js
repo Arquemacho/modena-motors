@@ -18,10 +18,15 @@ const HomePage = () => {
     ]);
 
     const brands = [
-        // Asumiendo que tienes imágenes para cada marca en tu carpeta public/images
-        { name: 'Bugatti', imagePath: '/images/brands/bugatti.jpg' },
-        { name: 'Ferrari', imagePath: '/images/brands/ferrari.jpg' },
-        // Agrega aquí más marcas
+        { name: 'Bugatti', imagePath: '/images/brands/bugatti.png' },
+        { name: 'Koenigsegg', imagePath: '/images/brands/koenigsegg.png' },
+        { name: 'Ferrari', imagePath: '/images/brands/ferrari.png' },
+        { name: 'Porsche', imagePath: '/images/brands/porsche.png' },
+        { name: 'Lamborghini', imagePath: '/images/brands/lamborghini.png' },
+        { name: 'Aston Martin', imagePath: '/images/brands/astonmartin.png' },
+        { name: 'Rolls Royce', imagePath: '/images/brands/rollsroyce.png' },
+        { name: 'Bentley', imagePath: '/images/brands/bentley.png' },
+        // Agrega aquí más marcas si necesario
     ];
 
     const categories = [
@@ -36,27 +41,26 @@ const HomePage = () => {
     useEffect(() => {
         const fetchFeaturedModels = async () => {
             try {
-                const response = await fetch('http://localhost:3001/api/vehicles'); // Asume que tienes una ruta así configurada en tu API
+                const vehicleResponse = await fetch('http://localhost:3001/api/vehicles');
                 const brandResponse = await fetch('http://localhost:3001/api/brands');
                 const categoryResponse = await fetch('http://localhost:3001/api/categories');
 
                 if (!vehicleResponse.ok || !brandResponse.ok || !categoryResponse.ok) throw new Error('Failed to fetch');
 
-              const vehicleData = await vehicleResponse.json();
-              const brandsData = await brandResponse.json();
-              const categoriesData = await categoryResponse.json();
+                const vehicleData = await vehicleResponse.json();
+                const brandsData = await brandResponse.json();
+                const categoriesData = await categoryResponse.json();
 
-              const brandsMap = brandsData.brands.reduce((acc, brand) => ({ ...acc, [brand.id]: brand }), {});
-              const categoriesMap = categoriesData.categories.reduce((acc, category) => ({ ...acc, [category.id]: category }), {});
+                const brandsMap = brandsData.brands.reduce((acc, brand) => ({ ...acc, [brand.id]: brand }), {});
+                const categoriesMap = categoriesData.categories.reduce((acc, category) => ({ ...acc, [category.id]: category }), {});
 
-              const enrichedVehicles = vehicleData.vehicles.map(vehicle => ({
-                ...vehicle,
-                brand: brandsMap[vehicle.brand_id],
-                category: categoriesMap[vehicle.category_id]
-              }));
-              console.log(enrichedVehicles);
+                const enrichedVehicles = vehicleData.vehicles.map(vehicle => ({
+                    ...vehicle,
+                    brand: brandsMap[vehicle.brand_id],
+                    category: categoriesMap[vehicle.category_id]
+                }));
 
-              setFeaturedModels(enrichedVehicles);
+                setFeaturedModels(enrichedVehicles);
             } catch (error) {
                 console.error('Error fetching featured models:', error);
             }
@@ -64,6 +68,7 @@ const HomePage = () => {
 
         fetchFeaturedModels();
     }, []);
+
 
     const [testimonials, setTestimonials] = useState([
         // Dummy data for testimonials
@@ -112,7 +117,14 @@ const HomePage = () => {
                   ))}
                 </div>
             </section>
-            <BrandsSection brands={brands} />
+            <div className="brands-section">
+                {brands.map(brand => (
+                    <div key={brand.name} className="brand-card">
+                        <img src={brand.imagePath} alt={brand.name} className="brand-logo" />
+                        <Link to={`/vehicles/brand/${brand.name}`} className="brand-link">Explora {brand.name}</Link>
+                    </div>
+                ))}
+            </div>
             <Testimonials testimonials={testimonials}/>
             <LaunchAnnouncements announcements={launches}/>
             <div className="full-catalogue-link" data-aos="zoom-in">

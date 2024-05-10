@@ -484,3 +484,4 @@ backend/node_modules/wide-align/align.js
 backend/node_modules/wide-align/LICENSE
 backend/node_modules/wide-align/package.json
 backend/node_modules/wide-align/README.md
+backend/routes/.env.txt

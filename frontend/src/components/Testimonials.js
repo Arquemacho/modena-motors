@@ -5,15 +5,31 @@ import 'slick-carousel/slick/slick-theme.css';
 import '../styles/Testimonials.css';
 
 const Testimonials = ({ testimonials }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-  };
+	const settings = {
+		dots: true,
+		infinite: true,
+		speed: 500,
+		slidesToShow: 3, // Muestra 3 testimonios a la vez
+		slidesToScroll: 3,
+		autoplay: true,
+		autoplaySpeed: 5000,
+		responsive: [
+			{
+				breakpoint: 1024,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 2,
+				}
+			},
+			{
+				breakpoint: 600,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1,
+				}
+			}
+		]
+	};
 
   return (
     <div className="testimonials-container">

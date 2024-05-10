@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
+import '../../styles/ManageClients.css';
+import { Link } from 'react-router-dom';
 
 const ManageClients = () => {
   const [clients, setClients] = useState([]);
@@ -102,25 +104,34 @@ const ManageClients = () => {
   };
 
   return (
-    <div>
+    <div className="manage-clients">
       <h1>Gestión de Clientes</h1>
-      <form onSubmit={handleAddOrUpdateClient}>
-        <input type="text" name="name" value={name} onChange={e => setName(e.target.value)} placeholder="Name" required />
-        <input type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
-        <input type="text" name="phone" value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone" required />
-        <label>
-          VIP Status:
-          <input type="checkbox" name="vipStatus" checked={vipStatus} onChange={e => setVipStatus(e.target.checked)} />
-        </label>
-        <button type="submit">{editingClient ? 'Update Client' : 'Add Client'}</button>
-      </form>
-      {clients.map(client => (
-        <div key={client.id}>
-          <p>{client.name} - {client.email} - VIP: {client.vipStatus ? 'Yes' : 'No'}</p>
-          <button onClick={() => handleEdit(client)}>Edit</button>
-          <button onClick={() => handleDelete(client.id)}>Delete</button>
+      <Link to="/admin-panel" className="back-to-admin">Volver al Panel Administrativo</Link>
+      <form onSubmit={handleAddOrUpdateClient} className="client-form">
+        <input type="text" name="name" value={name} onChange={e => setName(e.target.value)} placeholder="Nombre" required />
+        <input type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Correo electrónico" required />
+        <input type="text" name="phone" value={phone} onChange={e => setPhone(e.target.value)} placeholder="Teléfono" required />
+        <div>
+          <label>
+            Estado VIP:
+            <input type="checkbox" name="vipStatus" checked={vipStatus} onChange={e => setVipStatus(e.target.checked)} />
+          </label>
         </div>
-      ))}
+        <button type="submit">{editingClient ? 'Actualizar Cliente' : 'Agregar Cliente'}</button>
+      </form>
+      <div className="client-list">
+        {clients.map(client => (
+          <div key={client.id} className="client-item">
+            <div className="client-details">
+              <p>{client.name} - {client.email} - VIP: {client.vipStatus ? 'Sí' : 'No'}</p>
+            </div>
+            <div className="client-actions">
+              <button onClick={() => handleEdit(client)}>Editar</button>
+              <button onClick={() => handleDelete(client.id)}>Eliminar</button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

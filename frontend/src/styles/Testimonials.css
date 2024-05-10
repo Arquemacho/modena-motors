@@ -6,27 +6,34 @@
 
 .testimonial {
     margin: 0 auto;
-    padding: 20px;
-    max-width: 700px;
+    padding: 30px;
+    max-width: 300px; /* Más estrecho para permitir múltiples testimonios */
     background-color: #ffffff;
-    border-left: 5px solid #d80000;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     font-style: italic;
     position: relative;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid #d80000; /* Añade una línea a la izquierda */
 }
 
 .testimonial:before {
-    content: open-quote;
+    content: ''; /* Elimina la flecha roja modificando este contenido a vacío */
     font-size: 4rem;
     position: absolute;
-    left: -10px;
-    top: -10px;
+    left: 10px;
+    top: -30px;
     color: #d80000;
 }
-
 .testimonial cite {
     display: block;
     margin-top: 15px;
     font-weight: bold;
     font-style: normal;
     color: #333;
+}
+
+.testimonial:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }

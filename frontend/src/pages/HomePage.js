@@ -30,9 +30,9 @@ const HomePage = () => {
     ];
 
     const categories = [
-        { name: 'Super Autos', imagePath: '/images/models/car1.jpg', linkTo: '/vehicles/category/SuperAutos' },
-        { name: 'Autos Deportivos', imagePath: '/images/models/car2.jpg', linkTo: '/vehicles/category/Deportivos' },
-        { name: 'Autos de Ultra Lujo', imagePath: '/images/models/car3.jpg', linkTo: '/vehicles/category/UltraLujo' },
+        { name: 'Super Autos', imagePath: '/images/models/car1.jpg', linkTo: '/vehicles/category/Super Autos' },
+        { name: 'Autos Deportivos', imagePath: '/images/models/car2.jpg', linkTo: '/vehicles/category/Autos Deportivos' },
+        { name: 'Autos de Ultra Lujo', imagePath: '/images/models/car3.jpg', linkTo: '/vehicles/category/Autos de Ultra Lujo' },
     ];
 
 
@@ -71,15 +71,20 @@ const HomePage = () => {
 
 
     const [testimonials, setTestimonials] = useState([
-        // Dummy data for testimonials
-        { id: 1, quote: "Best car purchase experience ever!", author: "John Doe" },
-        { id: 2, quote: "A truly premium service.", author: "Jane Smith" }
-    ]);
+		{ id: 1, quote: "¡La mejor experiencia de compra de mi vida!", author: "Juan Pérez" },
+		{ id: 2, quote: "Un servicio realmente premium.", author: "Ana Gómez" },
+		{ id: 3, quote: "Calidad y atención excepcional.", author: "Eduardo Ramírez" },
+		{ id: 4, quote: "¡La mejor experiencia de compra de mi vida!", author: "Juan Pérez" },
+		{ id: 5, quote: "Un servicio realmente premium.", author: "Ana Gómez" },
+		{ id: 6, quote: "Calidad y atención excepcional.", author: "Eduardo Ramírez" },
+		{ id: 7, quote: "¡La mejor experiencia de compra de mi vida!", author: "Juan Pérez" },
+		{ id: 8, quote: "Un servicio realmente premium.", author: "Ana Gómez" },
+		{ id: 9, quote: "Calidad y atención excepcional.", author: "Eduardo Ramírez" }
+	]);
 
     const [launches, setLaunches] = useState([
-        // Dummy data for launch announcements
-        { id: 1, title: "Model X Launch", description: "Join us for the launch of our new supercar model X." }
-    ]);
+		{ id: 1, title: "Lanzamiento del Modelo X", description: "Únete a nosotros para el lanzamiento de nuestro nuevo supercarro modelo X.", date: new Date("2024-12-17") }
+	]);
 
     useEffect(() => {
         AOS.init({
@@ -104,19 +109,19 @@ const HomePage = () => {
             {/*<CarCarousel cars={cars} */}
             <FeaturedModels models={featuredModels} />
             <section className="category-section" data-aos="fade-up">
-                <h2>Explora por Categorías</h2>
-                <div className="category-list">
-                  {categories.map((category, index) => (
-                    <CategoryCard
-                      key={category.name}
-                      category={category.name}
-                      imagePath={category.imagePath}
-                      linkTo={category.linkTo}
-                      index={index} // Pasar el índice aquí
-                    />
-                  ))}
-                </div>
-            </section>
+				<h2>Descubre Nuestras Categorías</h2>
+				<div className="category-list">
+					{categories.map((category, index) => (
+						<CategoryCard
+							key={category.name}
+							category={category.name}
+							imagePath={category.imagePath}
+							linkTo={category.linkTo}
+							index={index}
+						/>
+					))}
+				</div>
+			</section>
             <div className="brands-section">
                 {brands.map(brand => (
                     <div key={brand.name} className="brand-card">

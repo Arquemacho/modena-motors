@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import VehicleCard from '../components/VehicleCard';
 import VehicleDetailsModal from '../components/VehicleDetailsModal';
 import '../styles/VehiclesGridPage.css';
+import { useParams } from 'react-router-dom';
 
 const VehiclesGridPage = () => {
+  const { brandName, categoryName, vehicleId } = useParams();
   const [vehicles, setVehicles] = useState([]);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,38 +22,61 @@ const VehiclesGridPage = () => {
   const [maxYear, setMaxYear] = useState('');
 
   useEffect(() => {
-  const fetchVehicles = async () => {
-    try {
-      const vehicleResponse = await fetch('http://localhost:3001/api/vehicles');
-      const brandResponse = await fetch('http://localhost:3001/api/brands');
-      const categoryResponse = await fetch('http://localhost:3001/api/categories');
-
-      if (!vehicleResponse.ok || !brandResponse.ok || !categoryResponse.ok) throw new Error('Failed to fetch');
-
-      const vehicleData = await vehicleResponse.json();
-      const brandsData = await brandResponse.json();
-      const categoriesData = await categoryResponse.json();
-
-      const brandsMap = brandsData.brands.reduce((acc, brand) => ({ ...acc, [brand.id]: brand }), {});
-      const categoriesMap = categoriesData.categories.reduce((acc, category) => ({ ...acc, [category.id]: category }), {});
-
-      const enrichedVehicles = vehicleData.vehicles.map(vehicle => ({
-        ...vehicle,
-        brand: brandsMap[vehicle.brand_id],
-        category: categoriesMap[vehicle.category_id]
-      }));
-      console.log(enrichedVehicles);
-
-      setVehicles(enrichedVehicles);
-      setFilteredVehicles(enrichedVehicles);
-      setBrands(brandsData.brands);
-      setCategories(categoriesData.categories);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-  fetchVehicles();
-}, []);
+	const fetchVehicles = async () => {
+	  try {
+		const vehicleResponse = await fetch('http://localhost:3001/api/vehicles');
+		const brandResponse = await fetch('http://localhost:3001/api/brands');
+		const categoryResponse = await fetch('http://localhost:3001/api/categories');
+  
+		if (!vehicleResponse.ok || !brandResponse.ok || !categoryResponse.ok) throw new Error('Failed to fetch');
+  
+		const vehicleData = await vehicleResponse.json();
+		const brandsData = await brandResponse.json();
+		const categoriesData = await categoryResponse.json();
+  
+		const brandsMap = brandsData.brands.reduce((acc, brand) => ({ ...acc, [brand.id]: brand }), {});
+		const categoriesMap = categoriesData.categories.reduce((acc, category) => ({ ...acc, [category.id]: category }), {});
+  
+		const enrichedVehicles = vehicleData.vehicles.map(vehicle => ({
+		  ...vehicle,
+		  brand: brandsMap[vehicle.brand_id],
+		  category: categoriesMap[vehicle.category_id]
+		}));
+  
+		setVehicles(enrichedVehicles);
+		setBrands(brandsData.brands);
+		setCategories(categoriesData.categories);
+  
+		// Reset filters before applying new ones based on URL
+		setSelectedBrands([]);
+		setSelectedCategories([]);
+  
+		// Pre-filtrado basado en parámetros de URL
+		if (brandName) {
+		  const brand = brandsData.brands.find(b => b.name.toLowerCase() === brandName.toLowerCase());
+		  if (brand) {
+			setSelectedBrands([brand.id]);
+		  }
+		}
+		if (categoryName) {
+		  const category = categoriesData.categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
+		  if (category) {
+			setSelectedCategories([category.id]);
+		  }
+		}
+		if (vehicleId) {
+		  const selected = enrichedVehicles.find(vehicle => vehicle.id.toString() === vehicleId);
+		  if (selected) {
+			setSelectedVehicle(selected);
+		  }
+		}
+	  } catch (error) {
+		console.error('Error:', error);
+	  }
+	};
+	fetchVehicles();
+  }, [brandName, categoryName, vehicleId]); // Dependencias incluyen parámetros de URL
+  
 
 
 
@@ -88,19 +113,11 @@ const VehiclesGridPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+	setSearchTerm(e.target.value);
   };
 
   const handleSortChange = (e) => {
-    setSortKey(e.target.value);
-  };
-
-  const handleCheckboxChange = (type, value) => {
-    if (type === 'brand') {
-      setSelectedBrands(prev => prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]);
-    } else {
-      setSelectedCategories(prev => prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]);
-    }
+	setSortKey(e.target.value);
   };
 
   const openModal = (vehicle) => {

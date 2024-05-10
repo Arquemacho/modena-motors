@@ -1,27 +1,62 @@
 .launch-container {
-    padding: 40px 0;
-    background-color: #f8f8f8;
+    padding: 40px 20px;
+    background-color: #333; /* Fondo más oscuro para resaltar el contenido */
+    color: #fff;
     text-align: center;
 }
 
+/* Estilos para cada anuncio */
 .announcement {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px;
+    background-color: rgba(255, 255, 255, 0.08); /* Ligeramente visible */
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
     padding: 20px;
-    transition: all 0.3s ease;
+    max-width: 700px;
+    border-left: 5px solid #d80000; /* Línea lateral para destacar */
+    transition: all 0.3s ease; /* Suaviza la transición */
 }
 
 .announcement:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.03); /* Efecto de escalado al pasar el mouse */
+    border-left: 5px solid #ff4500; /* Cambia el color al pasar el mouse */
 }
 
+/* Estilos para los detalles de cada anuncio */
 .announcement h3 {
-    color: #333;
-    margin-bottom: 10px;
+    color: #ddd;
 }
 
 .announcement p {
-    color: #666;
+    color: #bbb;
+}
+
+/* Estilos para el Countdown */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 10px 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+.countdown span {
+    color: #ff4500;
+    padding: 5px 10px;
+    background-color: #222;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.countdown span:hover {
+    background-color: #333;
+}
+
+/* Animaciones AOS para el Countdown */
+[data-aos="countdown-animation"] {
+    animation-duration: 3s; /* Duración más larga para mayor dramatismo */
+    animation-delay: 1s; /* Inicia después de un segundo */
 }

@@ -1,0 +1,90 @@
+.manage-vehicles {
+	padding: 20px;
+	max-width: 1200px; /* más ancho para acomodar formas horizontales */
+	margin: auto;
+  }
+  
+  .vehicle-form {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 10px;
+	align-items: center;
+	margin-bottom: 30px;
+	padding: 20px;
+	background: #ffdede;
+	border-radius: 8px;
+  }
+  
+  .vehicle-form input, 
+.vehicle-form select, 
+.vehicle-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+  
+.vehicle-form button {
+	grid-column: span 2; /* hace que el botón abarque dos columnas */
+	padding: 10px 20px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+  }
+  
+  .vehicle-form button:hover {
+	background-color: #45a049;
+  }
+  
+  .vehicle-list {
+	margin-top: 20px;
+  }
+  .vehicle-details-container {
+	display: grid;
+	grid-template-columns: 120px auto auto;
+	align-items: center;
+	gap: 20px;
+	padding: 10px;
+	background-color: #f9f9f9;
+	border-bottom: 1px solid #e1e1e1;
+  }
+  
+  .vehicle-image {
+	width: 100px;
+	height: auto;
+	border-radius: 5px;
+  }
+  
+  .vehicle-details {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+  }
+  
+  .detail-label {
+	font-weight: bold;
+  }
+  
+  .detail-description {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+  }
+  
+  .back-to-admin {
+	display: block;
+	width: max-content;
+	padding: 8px 15px;
+	background-color: #007bff;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	margin-bottom: 20px;
+  }
+  
+  .back-to-admin:hover {
+	background-color: #0056b3;
+  }

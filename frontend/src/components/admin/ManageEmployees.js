@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
+import '../../styles/ManageEmployees.css';
 
 const ManageEmployees = () => {
   const [employees, setEmployees] = useState([]);
@@ -114,20 +116,30 @@ const ManageEmployees = () => {
   return (
     <div>
       <h1>Gestión de Empleados</h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" required />
-        <input type="text" name="position" value={formData.position} onChange={handleChange} placeholder="Position" required />
-        <input type="number" name="timeInCompany" value={formData.timeInCompany} onChange={handleChange} placeholder="Years in Company" required />
+	  <Link to="/admin-panel" className="back-to-admin">Volver al Panel Administrativo</Link>
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="employee-form">
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Nombre" required />
+        <input type="text" name="position" value={formData.position} onChange={handleChange} placeholder="Cargo" required />
+        <input type="number" name="timeInCompany" value={formData.timeInCompany} onChange={handleChange} placeholder="Años en la empresa" required />
         <input type="file" name="image" onChange={handleChange} accept="image/*" />
-        <button type="submit">{editingEmployee ? 'Update Employee' : 'Add Employee'}</button>
+        <button type="submit">{editingEmployee ? 'Actualizar Empleado' : 'Agregar Empleado'}</button>
       </form>
-      {employees.map(employee => (
-        <div key={employee.id}>
-          <p>{employee.name}</p>
-          <button onClick={() => handleEdit(employee)}>Edit</button>
-          <button onClick={() => handleDelete(employee.id)}>Delete</button>
-        </div>
-      ))}
+      <div className="employee-list">
+        {employees.map(employee => (
+          <div key={employee.id} className="employee-item">
+            <div>
+              {employee.imageURL && <img src={employee.imageURL} alt={employee.name} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />}
+            </div>
+            <div className="employee-details">
+              <p>{employee.name} - {employee.position} - {employee.timeInCompany} años</p>
+            </div>
+            <div className="employee-actions">
+              <button onClick={() => handleEdit(employee)}>Editar</button>
+              <button onClick={() => handleDelete(employee.id)}>Eliminar</button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

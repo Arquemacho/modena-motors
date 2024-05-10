@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import '../styles/AdminLogin.css';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');  // Estado para manejar los errores
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -24,15 +26,15 @@ const AdminLogin = () => {
       authContext.setAuthData(token);
       navigate('/admin-panel');
     } else {
-      alert('Login failed!');
+	  setError('Login failed! Please try again.');  // Mostrar mensaje de error
       console.log("Error en el inicio de sesión");
     }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h1>Admin Login</h1>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} className="login-form">
         <input
           type="text"
           placeholder="Username"
@@ -45,6 +47,7 @@ const AdminLogin = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {error && <div className="error-message">{error}</div>}
         <button type="submit">Login</button>
       </form>
     </div>

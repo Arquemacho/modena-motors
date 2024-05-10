@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
+import '../../styles/ManageVehicles.css';
+import { Link } from 'react-router-dom';
 
 const ManageVehicles = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -9,26 +11,45 @@ const ManageVehicles = () => {
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await Promise.all([
-          fetch('http://localhost:3001/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } }),
-          fetch('http://localhost:3001/api/brands', { headers: { 'Authorization': `Bearer ${token}` } }),
-          fetch('http://localhost:3001/api/categories', { headers: { 'Authorization': `Bearer ${token}` } })
-        ]);
-
-        if (!res[0].ok || !res[1].ok || !res[2].ok) throw new Error('Failed to fetch data');
-
-        const data = await Promise.all(res.map(r => r.json()));
-        setVehicles(data[0].vehicles);
-        setBrands(data[1].brands);
-        setCategories(data[2].categories);
-      } catch (error) {
-        console.error('Fetch error:', error.message);
-      }
-    };
-    fetchData();
+	const fetchData = async () => {
+	  try {
+		const res = await Promise.all([
+		  fetch('http://localhost:3001/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } }),
+		  fetch('http://localhost:3001/api/brands', { headers: { 'Authorization': `Bearer ${token}` } }),
+		  fetch('http://localhost:3001/api/categories', { headers: { 'Authorization': `Bearer ${token}` } })
+		]);
+  
+		if (!res[0].ok || !res[1].ok || !res[2].ok) throw new Error('Failed to fetch data');
+  
+		const data = await Promise.all(res.map(r => r.json()));
+		const [vehicleData, brandData, categoryData] = data;
+  
+		const brandsMap = brandData.brands.reduce((acc, brand) => {
+		  acc[brand.id] = brand;
+		  return acc;
+		}, {});
+  
+		const categoriesMap = categoryData.categories.reduce((acc, category) => {
+		  acc[category.id] = category;
+		  return acc;
+		}, {});
+  
+		const enrichedVehicles = vehicleData.vehicles.map(vehicle => ({
+		  ...vehicle,
+		  brand: brandsMap[vehicle.brand_id],
+		  category: categoriesMap[vehicle.category_id]
+		}));
+  
+		setVehicles(enrichedVehicles);
+		setBrands(brandData.brands);
+		setCategories(categoryData.categories);
+	  } catch (error) {
+		console.error('Fetch error:', error.message);
+	  }
+	};
+	fetchData();
   }, [token]);
+  
 
   const handleAddOrUpdateVehicle = async (event) => {
     event.preventDefault();
@@ -89,9 +110,10 @@ const ManageVehicles = () => {
   };
 
   return (
-    <div>
-      <h1>Gestión de Vehículos</h1>
-<form onSubmit={handleAddOrUpdateVehicle} encType="multipart/form-data">
+	<div>
+	  <h1>Gestión de Vehículos</h1>
+	  <Link to="/admin-panel" className="back-to-admin">Volver al Panel Administrativo</Link>
+	  <form onSubmit={handleAddOrUpdateVehicle} encType="multipart/form-data" className="vehicle-form">
 <div>
 <label>
 Marca:
@@ -119,16 +141,34 @@ Categoría:
 <input type="file" name="image" accept="image/*" />
 <button type="submit">{editingVehicle ? 'Actualizar Vehículo' : 'Agregar Vehículo'}</button>
 </form>
-<div>
-{vehicles.map(vehicle => (
-<div key={vehicle.id}>
-<p>{vehicle.brand} {vehicle.model} - {vehicle.year}</p>
-<button onClick={() => handleEdit(vehicle)}>Editar</button>
-<button onClick={() => handleDelete(vehicle.id)}>Eliminar</button>
-</div>
-))}
-</div>
-</div>
+<div className="vehicle-list">
+      {vehicles.map(vehicle => (
+        <div key={vehicle.id} className="vehicle-details-container">
+          <div>
+            <img src={`http://localhost:3001/${vehicle.imagePath}`} alt={vehicle.model} className="vehicle-image" />
+          </div>
+          <div className="vehicle-details">
+            <span className="detail-label">Marca:</span>
+            <span className="detail-description">{vehicle.brand.name}</span>
+            <span className="detail-label">Categoría:</span>
+            <span className="detail-description">{vehicle.category.name}</span>
+            <span className="detail-label">Modelo:</span>
+            <span className="detail-description">{vehicle.model}</span>
+            <span className="detail-label">Año:</span>
+            <span className="detail-description">{vehicle.year}</span>
+            <span className="detail-label">Precio:</span>
+            <span className="detail-description">${vehicle.price}</span>
+            <span className="detail-label">Descripción:</span>
+            <span className="detail-description">{vehicle.description}</span>
+          </div>
+          <div className="vehicle-actions">
+            <button onClick={() => handleEdit(vehicle)}>Editar</button>
+            <button onClick={() => handleDelete(vehicle.id)}>Eliminar</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
 );
 };
 

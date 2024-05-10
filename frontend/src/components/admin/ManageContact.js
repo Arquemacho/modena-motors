@@ -12,7 +12,7 @@ const ManageContact = () => {
   useEffect(() => {
     const fetchContactRequests = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/contact', {
+        const response = await fetch('http://186.113.234.239:3001/api/contact', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {
@@ -32,7 +32,7 @@ const ManageContact = () => {
 
   const handleMarkAsAttended = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3001/api/contact/${id}/mark-as-attended`, {
+    const response = await fetch(`http://186.113.234.239:3001/api/contact/${id}/mark-as-attended`, {
       method: 'PUT',
       headers: { 
         'Authorization': `Bearer ${token}`,

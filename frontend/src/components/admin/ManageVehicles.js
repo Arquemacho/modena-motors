@@ -14,9 +14,9 @@ const ManageVehicles = () => {
 	const fetchData = async () => {
 	  try {
 		const res = await Promise.all([
-		  fetch('http://localhost:3001/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } }),
-		  fetch('http://localhost:3001/api/brands', { headers: { 'Authorization': `Bearer ${token}` } }),
-		  fetch('http://localhost:3001/api/categories', { headers: { 'Authorization': `Bearer ${token}` } })
+		  fetch('http://186.113.234.239:3001/api/vehicles', { headers: { 'Authorization': `Bearer ${token}` } }),
+		  fetch('http://186.113.234.239:3001/api/brands', { headers: { 'Authorization': `Bearer ${token}` } }),
+		  fetch('http://186.113.234.239:3001/api/categories', { headers: { 'Authorization': `Bearer ${token}` } })
 		]);
   
 		if (!res[0].ok || !res[1].ok || !res[2].ok) throw new Error('Failed to fetch data');
@@ -65,7 +65,7 @@ const ManageVehicles = () => {
     formData.append('description', form.description.value);
     if (form.image.files[0]) formData.append('image', form.image.files[0]);
 
-    const url = editingVehicle ? `http://localhost:3001/api/vehicles/${editingVehicle.id}` : 'http://localhost:3001/api/vehicles';
+    const url = editingVehicle ? `http://186.113.234.239:3001/api/vehicles/${editingVehicle.id}` : 'http://186.113.234.239:3001/api/vehicles';
     const method = editingVehicle ? 'PUT' : 'POST';
 
     try {
@@ -97,7 +97,7 @@ const ManageVehicles = () => {
   };
 
   const handleDelete = async (vehicleId) => {
-    const response = await fetch(`http://localhost:3001/api/vehicles/${vehicleId}`, {
+    const response = await fetch(`http://186.113.234.239:3001/api/vehicles/${vehicleId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     });

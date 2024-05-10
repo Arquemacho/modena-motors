@@ -40,9 +40,9 @@ const HomePage = () => {
     useEffect(() => {
         const fetchFeaturedModels = async () => {
             try {
-                const vehicleResponse = await fetch('http://localhost:3001/api/vehicles');
-                const brandResponse = await fetch('http://localhost:3001/api/brands');
-                const categoryResponse = await fetch('http://localhost:3001/api/categories');
+                const vehicleResponse = await fetch('http://186.113.234.239:3001/api/vehicles');
+                const brandResponse = await fetch('http://186.113.234.239:3001/api/brands');
+                const categoryResponse = await fetch('http://186.113.234.239:3001/api/categories');
 
                 if (!vehicleResponse.ok || !brandResponse.ok || !categoryResponse.ok) throw new Error('Failed to fetch');
 

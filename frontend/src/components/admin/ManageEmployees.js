@@ -17,7 +17,7 @@ const ManageEmployees = () => {
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      const response = await fetch('http://localhost:3001/api/employees', {
+      const response = await fetch('http://186.113.234.239:3001/api/employees', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -52,7 +52,7 @@ const ManageEmployees = () => {
       data.append('imageURL', editingEmployee.imageURL);
     }
 
-    const url = editingEmployee ? `http://localhost:3001/api/employees/${editingEmployee.id}` : 'http://localhost:3001/api/employees';
+    const url = editingEmployee ? `http://186.113.234.239:3001/api/employees/${editingEmployee.id}` : 'http://186.113.234.239:3001/api/employees';
     const method = editingEmployee ? 'PUT' : 'POST';
 
     try {
@@ -101,7 +101,7 @@ const ManageEmployees = () => {
   };
 
   const handleDelete = async (employeeId) => {
-    const response = await fetch(`http://localhost:3001/api/employees/${employeeId}`, {
+    const response = await fetch(`http://186.113.234.239:3001/api/employees/${employeeId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     });

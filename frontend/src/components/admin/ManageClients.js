@@ -15,7 +15,7 @@ const ManageClients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/clients', {
+        const response = await fetch('http://186.113.234.239:3001/api/clients', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) {
@@ -49,7 +49,7 @@ const ManageClients = () => {
       vipStatus,
     };
 
-    const url = editingClient ? `http://localhost:3001/api/clients/${editingClient.id}` : 'http://localhost:3001/api/clients';
+    const url = editingClient ? `http://186.113.234.239:3001/api/clients/${editingClient.id}` : 'http://186.113.234.239:3001/api/clients';
     const method = editingClient ? 'PUT' : 'POST';
 
     try {
@@ -87,7 +87,7 @@ const ManageClients = () => {
 
   const handleDelete = async (clientId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/clients/${clientId}`, {
+      const response = await fetch(`http://186.113.234.239:3001/api/clients/${clientId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });

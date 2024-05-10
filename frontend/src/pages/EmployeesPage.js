@@ -7,7 +7,7 @@ const EmployeesPage = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/employees');
+        const response = await fetch('http://186.113.234.239:3001/api/employees');
         if (!response.ok) {
           throw new Error('Failed to fetch');
         }
@@ -27,7 +27,7 @@ const EmployeesPage = () => {
       <div className="employee-gallery">
         {employees.map(employee => (
           <div key={employee.id} className="employee-card">
-            <img src={`http://localhost:3001${employee.imageURL}`} alt={employee.name} onError={(e) => { e.target.onerror = null; e.target.src = '/images/default.jpg'; }} />
+            <img src={`http://186.113.234.239:3001${employee.imageURL}`} alt={employee.name} onError={(e) => { e.target.onerror = null; e.target.src = '/images/default.jpg'; }} />
             <h2>{employee.name}</h2>
             <p>Cargo: {employee.position}</p>
             <p>Tiempo en la empresa: {employee.timeInCompany} años</p>

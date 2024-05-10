@@ -30,3 +30,13 @@
 .contact-actions button:hover {
   background-color: #45a049;
 }
+
+.contact-actions img {
+  height: 40px; /* Ajusta según la necesidad */
+  cursor: pointer;
+  margin-left: 10px; /* Espacio a la izquierda para separación */
+}
+
+.vip {
+  background-color: gold;  /* Color de fondo para VIPs */
+}

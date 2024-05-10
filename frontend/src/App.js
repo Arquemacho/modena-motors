@@ -22,7 +22,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <NavBar />
-		<div className="main-content">
+		    <div className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about-us" element={<AboutUsPage />} />

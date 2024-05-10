@@ -12,7 +12,7 @@ const NavBar = () => {
                     <Link to="#" className="nav-link">Vehículos</Link>
                     <ul className="dropdown">
                         <li>
-                            <Link to="#" className="dropdown-link">Categorías</Link>
+                            <Link to="#" className="dropdown-link">Categorias</Link>
                             <ul className="dropdown-submenu">
                                 <li><Link to="/vehicles/category/Super Autos" className="dropdown-link-2">Super Autos</Link></li>
                                 <li><Link to="/vehicles/category/Autos Deportivos" className="dropdown-link-2">Autos Deportivos</Link></li>

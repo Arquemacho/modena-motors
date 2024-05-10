@@ -121,7 +121,7 @@ const ManageClients = () => {
       </form>
       <div className="client-list">
         {clients.map(client => (
-          <div key={client.id} className="client-item">
+          <div key={client.id} className={`client-item ${client.vipStatus ? 'vip' : ''}`}>
             <div className="client-details">
               <p>{client.name} - {client.email} - {client.phone} - VIP: {client.vipStatus ? 'Sí' : 'No'}</p>
             </div>

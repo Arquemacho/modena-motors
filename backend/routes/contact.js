@@ -42,13 +42,31 @@ router.post('/', (req, res) => {
 
 // GET: Recuperar todas las solicitudes de contacto
 router.get('/', (req, res) => {
-  db.all('SELECT * FROM contact_requests JOIN clients ON contact_requests.client_id = clients.id', [], (err, requests) => {
+  db.all('SELECT contact_requests.*, clients.*, contact_requests.attended == 1 AS attended FROM contact_requests JOIN clients ON contact_requests.client_id = clients.id', [], (err, requests) => {
     if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: 'Error al obtener las solicitudes de contacto' });
+        console.error(err.message);
+        return res.status(500).json({ error: 'Error al obtener las solicitudes de contacto' });
     }
-    res.json({ contactRequests: requests });
+    // Asegurarse de que todos los valores booleanos son correctamente interpretados
+    const formattedRequests = requests.map(request => ({
+      ...request,
+      attended: request.attended === 1, // Asegura que attended es un booleano
+      priority: request.priority === 1  // Asegura que priority es un booleano
+    }));
+    res.json({ contactRequests: formattedRequests });
   });
 });
+
+router.put('/:id/mark-as-attended', (req, res) => {
+  db.run('UPDATE contact_requests SET attended = TRUE WHERE id = ?', [req.params.id], function(err) {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Error al marcar como atendido' });
+    }
+    console.log("Updated mark attended", req.params);  // Muestra el ID para asegurar que solo se actualiza una vez
+    res.json({ message: 'Solicitud marcada como atendida', changes: this.changes });
+  });
+});
+
 
 module.exports = router;

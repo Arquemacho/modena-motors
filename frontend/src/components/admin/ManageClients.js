@@ -123,7 +123,7 @@ const ManageClients = () => {
         {clients.map(client => (
           <div key={client.id} className="client-item">
             <div className="client-details">
-              <p>{client.name} - {client.email} - VIP: {client.vipStatus ? 'Sí' : 'No'}</p>
+              <p>{client.name} - {client.email} - {client.phone} - VIP: {client.vipStatus ? 'Sí' : 'No'}</p>
             </div>
             <div className="client-actions">
               <button onClick={() => handleEdit(client)}>Editar</button>

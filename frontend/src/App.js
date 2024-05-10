@@ -14,6 +14,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ManageVehicles from './components/admin/ManageVehicles';
 import ManageEmployees from './components/admin/ManageEmployees';
 import ManageClients from './components/admin/ManageClients';
+import ManageContact from './components/admin/ManageContact';
 import './styles/App.css';
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/admin/vehicles" element={<PrivateRoute><ManageVehicles /></PrivateRoute>} />
           <Route path="/admin/employees" element={<PrivateRoute><ManageEmployees /></PrivateRoute>} />
           <Route path="/admin/clients" element={<PrivateRoute><ManageClients /></PrivateRoute>} />
+          <Route path="/admin/contact" element={<PrivateRoute><ManageContact /></PrivateRoute>} />
           <Route path="*" element={<NotFoundPage />} /> {/* Esta ruta captura cualquier URL no definida */}
         </Routes>
 		</div>

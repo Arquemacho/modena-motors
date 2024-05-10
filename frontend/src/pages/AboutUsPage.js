@@ -1,7 +1,45 @@
-import React from 'react';
-import '../styles/AboutUsPage.css'; // Asegúrate de importar el CSS
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import '../styles/AboutUsPage.css';
+import Confetti from 'react-confetti';
 
 const AboutUsPage = () => {
+  const location = useLocation();
+  const defaultMessage = location.state?.message || '';
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: defaultMessage,
+    phone: ''
+  });
+  const [messageSent, setMessageSent] = useState(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      if (response.ok) {
+        setMessageSent(true);
+        setFormData({ name: '', email: '', message: '', phone: '' });
+      } else {
+        const errorText = await response.text();
+        alert(`Error al enviar mensaje: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error enviando el formulario:', error);
+      alert('Error al enviar el mensaje. Inténtalo de nuevo.');
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
     <div className="about-us">
       <section className="about-header">
@@ -39,6 +77,27 @@ const AboutUsPage = () => {
           <img src="/images/about-global.jpg" alt="Global Presence" className="about-image"/>
         </section>
       </div>
+      <section className="contact-section">
+        <h2 className="section-title">Contacto</h2>
+        {messageSent ? (
+        <>
+          <Confetti />
+          <h1>Mensaje Enviado</h1>
+          <p>¡Gracias por contactarnos! Nos pondremos en contacto contigo pronto.</p>
+        </>
+      ) : (
+        <>
+          <form className="contact-form" onSubmit={handleSubmit}>
+          <input type="text" name="name" placeholder="Tu nombre" value={formData.name} onChange={handleChange} required />
+          <input type="email" name="email" placeholder="Tu correo electrónico" value={formData.email} onChange={handleChange} required />
+          <input type="text" name="phone" placeholder="Tu teléfono" value={formData.phone} onChange={handleChange} required />
+          <textarea name="message" placeholder="Tu mensaje" value={formData.message} onChange={handleChange} required />
+          <button type="submit">Enviar Mensaje</button>
+        </form>
+        </>
+      )}
+        
+      </section>
     </div>
   );
 };

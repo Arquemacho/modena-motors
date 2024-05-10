@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import CarCarousel from '../components/CarCarousel';
 import FeaturedModels from '../components/FeaturedModels';
 import Testimonials from '../components/Testimonials';
 import LaunchAnnouncements from '../components/LaunchAnnouncements';
@@ -83,7 +82,7 @@ const HomePage = () => {
 	]);
 
     const [launches, setLaunches] = useState([
-		{ id: 1, title: "Lanzamiento del Modelo X", description: "Únete a nosotros para el lanzamiento de nuestro nuevo supercarro modelo X.", date: new Date("2024-12-17") }
+		{ id: 1, title: "Lanzamiento del Modelo X", description: "Únete a nosotros para el lanzamiento de nuestro nuevo supercarro modelo X.", date: new Date("2025-02-7") }
 	]);
 
     useEffect(() => {
@@ -106,7 +105,6 @@ const HomePage = () => {
                 <p data-aos="zoom-in" data-aos-delay="500">Explora nuestra exclusiva colección de super autos, autos deportivos, y autos de ultra lujo.</p>
                 <div className="scroll-down" onClick={handleScroll}>&#x2193;</div>
             </section>
-            {/*<CarCarousel cars={cars} */}
             <FeaturedModels models={featuredModels} />
             <section className="category-section" data-aos="fade-up">
 				<h2>Descubre Nuestras Categorías</h2>

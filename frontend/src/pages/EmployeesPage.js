@@ -23,7 +23,7 @@ const EmployeesPage = () => {
 
   return (
     <div className="employees-page">
-      <h1>Nuestro Equipo</h1>
+      <h1>Conoce a Nuestro Equipo</h1>
       <div className="employee-gallery">
         {employees.map(employee => (
           <div key={employee.id} className="employee-card">

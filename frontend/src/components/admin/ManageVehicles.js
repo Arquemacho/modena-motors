@@ -145,8 +145,8 @@ Categoría:
       {vehicles.map(vehicle => (
         <div key={vehicle.id} className="vehicle-details-container">
           <div>
-            <img src={`http://localhost:3001/${vehicle.imagePath}`} alt={vehicle.model} className="vehicle-image" />
-          </div>
+              {vehicle.imageURL && <img src={vehicle.imageURL} alt={vehicle.model} style={{ width: '75px', height: '75px', borderRadius: '80%' }} />}
+            </div>
           <div className="vehicle-details">
             <span className="detail-label">Marca:</span>
             <span className="detail-description">{vehicle.brand.name}</span>

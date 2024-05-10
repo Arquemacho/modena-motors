@@ -68,6 +68,18 @@ CREATE TABLE IF NOT EXISTS categories (
     )
   `);
 
+  db.run(`
+  CREATE TABLE IF NOT EXISTS contact_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER,
+    message TEXT NOT NULL,
+    attended BOOLEAN DEFAULT FALSE,
+    priority BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+  )
+`);
+
+
   console.log('Tablas creadas con éxito');
 });
 
@@ -78,6 +90,7 @@ const employeesRouter = require('./routes/employees');
 const authRouter = require('./routes/authRoutes');
 const brandsRouter = require('./routes/brands');  // Nuevo
 const categoriesRouter = require('./routes/categories');  // Nuevo
+const contactRouter = require('./routes/contact');
 
 // Middlewares
 app.use(express.json());
@@ -90,6 +103,7 @@ app.use('/api/employees', employeesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/brands', brandsRouter);  // Nuevo
 app.use('/api/categories', categoriesRouter);  // Nuevo
+app.use('/api/contact', contactRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

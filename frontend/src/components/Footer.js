@@ -1,9 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Agrega esta línea
-import '../styles/Footer.css'; // Importar el CSS actualizado
+import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate
+import '../styles/Footer.css';
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const navigate = useNavigate(); // Hook para la navegación
+
+  const handleContactClick = () => {
+    navigate('/about-us', { state: { message: `Quisiera contactarme con Modena Motors para ...` } }); // Suponiendo que la ruta a la página de contacto sea '/contact-us'
+  };
 
   return (
     <footer className="footer">
@@ -19,13 +24,16 @@ const Footer = () => {
           <a href="https://instagram.com" className="footer-link" target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
         <div className="footer-section contact-info">
-          <a href="mailto:contact@modenamotors.com" className="contact-info-item">contact@modenamotors.com</a><a></a>
+          <a href="mailto:contact@modenamotors.com" className="contact-info-item">contact@modenamotors.com</a>
           <a href="tel:+1234567890" className="contact-info-item">+123 456 7890</a>
         </div>
-		<div className="footer-section admin-login">
+        <div className="footer-section admin-login">
           <Link to="/admin" className="footer-link">
             Consola de Administrador
           </Link>
+        </div>
+        <div className="footer-section contact-link">
+          <button onClick={handleContactClick} className="footer-contact-button">Contacto</button>
         </div>
       </div>
     </footer>

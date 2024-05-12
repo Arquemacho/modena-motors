@@ -141,11 +141,10 @@ const VehiclesGridPage = () => {
 	  setSelectedCategories(selectedCategories.filter(id => id !== categoryId));
 	}
   };
-
+  
   return (
-	<div className="container">
-	  <div className="sidebar">
-		<div className="filters-container">
+    <div className="vehicles-page-container">
+      <aside className="filters-sidebar">
 		  <h4>Filtrar por Marca:</h4>
 		  {brands.map(brand => (
 			<div key={brand.id} className="filter-checkbox">
@@ -181,9 +180,9 @@ const VehiclesGridPage = () => {
 		  <h4>Rango de Años:</h4>
 		  <input type="number" placeholder="Año mínimo" value={minYear} onChange={e => setMinYear(e.target.value)} />
 		  <input type="number" placeholder="Año máximo" value={maxYear} onChange={e => setMaxYear(e.target.value)} />
-		</div>
-	  </div>
-	  <div className="main-content">
+	  </aside>
+	  <main className="vehicles-display-area">
+        <div className="search-and-sort-container">
 		<input type="text" placeholder="Buscar por marca, modelo o año..." value={searchTerm} onChange={handleSearchChange} />
 		<select onChange={handleSortChange} value={sortKey}>
 		  <option value="">Ordenar por</option>
@@ -192,13 +191,14 @@ const VehiclesGridPage = () => {
 		  <option value="yearAsc">Año Ascendente</option>
 		  <option value="yearDesc">Año Descendente</option>
 		</select>
-		<div className="vehicles-grid">
+		</div>
+        <div className="vehicles-grid">
 		  {filteredVehicles.map(vehicle => <VehicleCard key={vehicle.id} vehicle={vehicle} onClick={() => openModal(vehicle)} />)}
 		</div>
 		{selectedVehicle && <VehicleDetailsModal vehicle={selectedVehicle} onClose={() => setSelectedVehicle(null)} />}
+		</main>
 		{showScrollButton && <button className="scroll-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑ Subir</button>}
 	  </div>
-	</div>
   );
 
 

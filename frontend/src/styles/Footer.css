@@ -1,61 +1,64 @@
 .footer {
-    background-color: #1b1b1b; /* Un tono de negro más suave */
-    color: #ccc; /* Gris claro para el texto que mejora la legibilidad */
-    padding: 40px 20px; /* Espaciado generoso */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente moderna y limpia */
-    line-height: 1.6; /* Espaciado de línea para mejor legibilidad */
-    font-size: 0.9rem; /* Tamaño de fuente sutil */
-    border-top: 1px solid #444; /* Separador sutil */
+    background-color: #333; /* Color de fondo más oscuro para mejor contraste */
+    color: #fff; /* Texto en blanco para alta legibilidad */
+    padding: 40px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    font-size: 0.9rem;
+    border-top: 4px solid #d80000; /* Acento de color para separar del contenido principal */
 }
 
 .footer-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    max-width: 1200px; /* Ancho máximo para el contenido */
-    margin: 0 auto; /* Centra el contenido */
+    align-items: flex-start; /* Alinea los elementos de la columna al principio */
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px; /* Añade espacio entre las columnas */
 }
 
 .footer-section {
-    margin: 10px 0;
+    flex: 1; /* Hace que cada sección ocupe un espacio equitativo */
+    padding: 0 15px; /* Espaciado interno para no tocar los bordes del footer */
 }
 
 .footer-logo {
-    display: block;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-    color: #d80000; /* Color del logo que contrasta */
-    font-weight: bold;
+    font-size: 2rem; /* Logo más grande y visible */
+    color: #d80000; /* Color distintivo para el logo */
+    margin-bottom: 10px;
 }
 
 .footer-links {
     display: flex;
     flex-direction: column;
-    margin: 10px 0;
+    gap: 10px; /* Espacio vertical entre enlaces */
 }
 
-.footer-link {
-    color: #ccc;
-    margin-bottom: 10px; /* Espaciado entre enlaces */
-    transition: color 0.3s ease;
-}
-
-.footer-link:hover {
-    color: #d80000; /* Color cuando se hace hover que contrasta */
-}
-
-.contact-info {
-    margin: 10px 0;
-}
-
+.footer-link,
 .contact-info-item {
     color: #ccc;
-    margin-bottom: 10px;
     transition: color 0.3s ease;
+    display: block; /* Asegura que cada enlace está en su propia línea */
 }
 
+.footer-link:hover,
 .contact-info-item:hover {
-    color: #d80000; /* Consistencia en el efecto hover */
+    color: #d80000; /* Efecto hover para mejorar interactividad */
+}
+
+.admin-login .footer-link {
+    display: inline-block; /* Asegura que el estilo de hover aplica correctamente */
+    background-color: #444; /* Fondo oscuro para la sección de admin */
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.admin-login .footer-link:hover {
+    transform: scale(1.05); /* Efecto para resaltar la importancia */
+    background-color: #d80000;
+    color: white;
 }
 
 @media (max-width: 768px) {
@@ -64,22 +67,7 @@
     }
 
     .footer-section {
-        margin: 20px 0;
+        width: 100%; /* Asegura que cada sección use todo el ancho disponible */
+        padding: 10px 0; /* Espaciado vertical para dispositivos móviles */
     }
-}
-.admin-login {
-    margin-top: 10px;
-}
-
-.footer-link.admin-login {
-    font-weight: bold; /* Opcional: para darle énfasis */
-    font-size: 0.9rem; /* Tamaño de fuente adecuado */
-    padding: 5px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.footer-link.admin-login:hover {
-    transform: scale(1.05); /* Efecto para llamar la atención al área de admin */
-    background-color: rgba(216, 0, 0, 0.7); /* Fondo semitransparente al hacer hover */
-    color: white;
 }

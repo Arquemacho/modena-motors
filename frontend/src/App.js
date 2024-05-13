@@ -15,6 +15,7 @@ import ManageVehicles from './components/admin/ManageVehicles';
 import ManageEmployees from './components/admin/ManageEmployees';
 import ManageClients from './components/admin/ManageClients';
 import ManageContact from './components/admin/ManageContact';
+import Chatbot from './components/Chatbot';
 import './styles/App.css';
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <NavBar />
+		<Chatbot />
 		    <div className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -1,7 +1,7 @@
 // routes/clients.js
-const express = require('express');
+import express from 'express';
+import db from '../database/db.js';
 const router = express.Router();
-const db = require('../database/db');
 
 router.get('/', (req, res) => {
   db.all('SELECT * FROM clients', [], (err, clients) => {
@@ -52,4 +52,4 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

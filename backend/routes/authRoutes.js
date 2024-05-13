@@ -1,11 +1,10 @@
 // backend/routes/authRoutes.js
-
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv'); // Importa dotenv para manejar el archivo .env
+import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv'; // Importa dotenv para manejar el archivo .env
+import db from '../database/db.js';
 const router = express.Router();
-const db = require('../database/db');
 
 // Carga las variables de entorno desde el archivo .env
 dotenv.config();
@@ -30,4 +29,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

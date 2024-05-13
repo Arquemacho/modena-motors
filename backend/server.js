@@ -1,9 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import sqlite3 from 'sqlite3';
+import { fileURLToPath } from 'url';
+
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Construct __dirname
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Ruta de la base de datos
 const dbPath = path.join(__dirname, 'database', 'modenaMotors.db');
@@ -84,26 +89,26 @@ CREATE TABLE IF NOT EXISTS categories (
 });
 
 // Importar rutas
-const clientsRouter = require('./routes/clients');
-const vehiclesRouter = require('./routes/vehicles');
-const employeesRouter = require('./routes/employees');
-const authRouter = require('./routes/authRoutes');
-const brandsRouter = require('./routes/brands');  // Nuevo
-const categoriesRouter = require('./routes/categories');  // Nuevo
-const contactRouter = require('./routes/contact');
-
-// Middlewares
+import clientsRouter from './routes/clients.js';
+import vehiclesRouter from './routes/vehicles.js';
+import employeesRouter from './routes/employees.js';
+import authRouter from './routes/authRoutes.js';
+import brandsRouter from './routes/brands.js';
+import categoriesRouter from './routes/categories.js';
+import contactRouter from './routes/contact.js';
+import chatRouter from './routes/chatbot.js'; // Make sure this import is correct
+// Middlewares// Middlewares
 app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 app.use('/api/clients', clientsRouter);
 app.use('/api/vehicles', vehiclesRouter);
 app.use('/api/employees', employeesRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/brands', brandsRouter);  // Nuevo
-app.use('/api/categories', categoriesRouter);  // Nuevo
+app.use('/api/brands', brandsRouter);
+app.use('/api/categories', categoriesRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/chatbot', chatRouter); // Setup the chatbot API route
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

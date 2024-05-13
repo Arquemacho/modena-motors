@@ -1,9 +1,9 @@
 // routes/employees.js
-const express = require('express');
+import express from 'express';
+import db from '../database/db.js';
 const router = express.Router();
-const multer = require('multer');
-const db = require('../database/db');
-const path = require('path');
+import multer from 'multer';
+import path from 'path';
 
 // Configuración de multer para empleados
 const storageEmployees = multer.diskStorage({
@@ -85,5 +85,4 @@ router.delete('/:id', (req, res) => {
     res.json({ message: 'Empleado eliminado', changes: this.changes });
   });
 });
-
-module.exports = router;
+export default router;

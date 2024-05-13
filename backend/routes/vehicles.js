@@ -1,10 +1,9 @@
 // routes/vehicles.js
-const express = require('express');
+import express from 'express';
+import db from '../database/db.js';
 const router = express.Router();
-const multer = require('multer');
-const db = require('../database/db');
-const path = require('path');
-
+import multer from 'multer';
+import path from 'path';
 // Configuración de multer para vehículos
 const storageVehicles = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -88,4 +87,4 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

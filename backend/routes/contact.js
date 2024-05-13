@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import db from '../database/db.js';
 const router = express.Router();
-const db = require('../database/db');
 
 // POST: Crear una nueva solicitud de contacto
 router.post('/', (req, res) => {
@@ -69,4 +69,4 @@ router.put('/:id/mark-as-attended', (req, res) => {
 });
 
 
-module.exports = router;
+export default router;

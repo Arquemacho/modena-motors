@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import db from '../database/db.js';
 const router = express.Router();
-const db = require('../database/db');
 
 // Obtener todos los usuarios con manejo de errores mejorado
 router.get('/', (req, res) => {
@@ -48,4 +48,4 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

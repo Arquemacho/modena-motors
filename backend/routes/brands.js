@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import db from '../database/db.js';
 const router = express.Router();
-const db = require('../database/db');
 
 router.get('/', (req, res) => {
   db.all('SELECT * FROM brands', [], (err, brands) => {
@@ -14,4 +14,4 @@ router.get('/', (req, res) => {
 
 // Añade aquí más operaciones CRUD según sea necesario
 
-module.exports = router;
+export default router;

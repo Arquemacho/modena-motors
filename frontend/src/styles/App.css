@@ -18,3 +18,9 @@ body {
   }
   /* Añade más estilos globales o específicos de la app aquí */
   
+  @media (max-width: 768px) {
+	.main-content {
+	  padding-top: 120px; /* Ajusta según la altura de tu barra de navegación */
+	}
+	  }
+  

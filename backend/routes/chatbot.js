@@ -2,11 +2,11 @@ import express from 'express';
 import { LlamaModel, LlamaContext, LlamaChatSession, ChatPromptWrapper } from 'node-llama-cpp';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import db from '../database/db.js'; // Adjust the path as necessary
 
 class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
     wrapPrompt(prompt, {systemPrompt, promptIndex}) {
-        // Simplificamos el systemPrompt para que sea más genérico y menos repetitivo
-        const customSystemPrompt = "Eres el asistente virtual de Modena Motors, dedicado a ayudar a los usuarios a obtener información precisa sobre nuestros vehículos y servicios. Mantén siempre un tono respetuoso y profesional. Si no comprendes una pregunta o no tienes la información disponible, pide amablemente más detalles o sugiere alternativas útiles.";
+        const customSystemPrompt = "Eres el asistente virtual de Modena Motors, dedicado a ayudar a los usuarios a obtener información precisa sobre nuestros vehículos y servicios.";
         return `${customSystemPrompt}\nUSER: ${prompt}\nASSISTANT:`;
     }
 
@@ -18,7 +18,6 @@ class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
         return "USER:";
     }
 }
-
 
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -33,16 +32,54 @@ const session = new LlamaChatSession({
     promptWrapper: new ModenaMotorsChatPromptWrapper()
 });
 
+async function fetchDatabaseInfo(prompt) {
+    const keywords = prompt.toLowerCase().split(" ");
+    let info = "";
+
+    if (keywords.includes("marcas") || keywords.includes("marca")) {
+        info += await fetchFromDatabase('SELECT name FROM brands', 'marcas disponibles: ', true);
+    }
+    if (keywords.includes("categoria") || keywords.includes("categorías") || keywords.includes("categorias")) {
+        info += await fetchFromDatabase('SELECT name FROM categories', 'categorías disponibles: ', true);
+    }
+    if (keywords.includes("vehículos") || keywords.includes("vehiculos") || keywords.includes("modelos") || keywords.includes("modelo") || keywords.includes("autos") || keywords.includes("coches") || keywords.includes("vehiculo")  || keywords.includes("vehículo")) {
+        info += await fetchFromDatabase('SELECT model FROM vehicles', 'modelos de vehículos: ', false);
+    }
+
+    return info;
+}
+
+async function fetchFromDatabase(sql, prefix, isListShortened) {
+    return new Promise((resolve, reject) => {
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+                reject(err.message);
+                return;
+            }
+            let items = rows.map(row => row.name || row.model);
+            if (isListShortened && items.length > 3) {
+                items = items.slice(0, 3); // Limitar a los primeros tres elementos
+                items.push('y otros...');
+            }
+            resolve(items.length > 0 ? `${prefix} ${items.join(", ")}. ` : "");
+        });
+    });
+}
+
+
 router.post('/', async (req, res) => {
-	console.log('Received chat request:', req.body);
-  const { prompt } = req.body;
-  try {
-    const response = await session.prompt(prompt);
-    res.json({ reply: response });
-  } catch (error) {
-    console.error('Error during chat session:', error);
-    res.status(500).json({ error: 'Failed to process the chat request.' });
-  }
+	console.log('Chat request received:', req.body);
+    const { prompt } = req.body;
+    try {
+        const dbInfo = await fetchDatabaseInfo(prompt);
+        const fullPrompt = `${dbInfo}\nUSER: ${prompt}\nASSISTANT:`;
+		console.log('Full prompt:', fullPrompt);
+        const response = await session.prompt(fullPrompt);
+        res.json({ reply: response });
+    } catch (error) {
+        console.error('Error during chat session:', error);
+        res.status(500).json({ error: 'Failed to process the chat request.' });
+    }
 });
 
 export default router;

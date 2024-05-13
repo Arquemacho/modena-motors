@@ -485,3 +485,5 @@ backend/node_modules/wide-align/LICENSE
 backend/node_modules/wide-align/package.json
 backend/node_modules/wide-align/README.md
 backend/routes/.env.txt
+backend/capybarahermes-2.5-mistral-7b.Q4_K_M.gguf
+backend/Meta-Llama-3-8B-Instruct-bf16.gguf

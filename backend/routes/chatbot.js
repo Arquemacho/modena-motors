@@ -6,7 +6,7 @@ import db from '../database/db.js'; // Adjust the path as necessary
 
 class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
     wrapPrompt(prompt, {systemPrompt, promptIndex}) {
-        const customSystemPrompt = "You are an intelligent assistant for Modena Motors, dedicated to helping users gain accurate information about our vehicles and services. Maintain a respectful and professional tone at all times.";
+        const customSystemPrompt = "Eres el asistente virtual de Modena Motors, dedicado a ayudar a los usuarios a obtener información precisa sobre nuestros vehículos y servicios.";
         return `${customSystemPrompt}\nUSER: ${prompt}\nASSISTANT:`;
     }
 
@@ -21,30 +21,29 @@ class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
 
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+//const modelPath = path.join (__dirname, '..', 'tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf');
 const modelPath = path.join(__dirname, '..', 'capybarahermes-2.5-mistral-7b.Q4_K_M.gguf');
 
-// Global model and context initialization
-let model = null;
-let context = null;
-
-async function initializeModel() {
-    if (!model) {
-        model = new LlamaModel({ modelPath });
-        context = new LlamaContext({ model });
-    }
-}
+const model = new LlamaModel({
+    modelPath: modelPath
+});
+const context = new LlamaContext({ model });
+const session = new LlamaChatSession({
+    context,
+    promptWrapper: new ModenaMotorsChatPromptWrapper()
+});
 
 async function fetchDatabaseInfo(prompt) {
     const keywords = prompt.toLowerCase().split(" ");
     let info = "";
 
-    if (keywords.includes("marcas")) {
+    if (keywords.includes("marcas") || keywords.includes("marca")) {
         info += await fetchFromDatabase('SELECT name FROM brands', 'marcas disponibles: ', true);
     }
-    if (keywords.includes("categorias")) {
+    if (keywords.includes("categoria") || keywords.includes("categorías") || keywords.includes("categorias")) {
         info += await fetchFromDatabase('SELECT name FROM categories', 'categorías disponibles: ', true);
     }
-    if (keywords.includes("vehiculos")) {
+    if (keywords.includes("vehículos") || keywords.includes("vehiculos") || keywords.includes("modelos") || keywords.includes("modelo") || keywords.includes("autos") || keywords.includes("coches") || keywords.includes("vehiculo")  || keywords.includes("vehículo")) {
         info += await fetchFromDatabase('SELECT model FROM vehicles', 'modelos de vehículos: ', false);
     }
 
@@ -60,7 +59,7 @@ async function fetchFromDatabase(sql, prefix, isListShortened) {
             }
             let items = rows.map(row => row.name || row.model);
             if (isListShortened && items.length > 3) {
-                items = items.slice(0, 3);
+                items = items.slice(0, 3); // Limitar a los primeros tres elementos
                 items.push('y otros...');
             }
             resolve(items.length > 0 ? `${prefix} ${items.join(", ")}. ` : "");
@@ -68,18 +67,14 @@ async function fetchFromDatabase(sql, prefix, isListShortened) {
     });
 }
 
-router.post('/', async (req, res) => {
-    console.log('Chat request received:', req.body);
-    const { prompt } = req.body;
-    await initializeModel(); // Ensure model is loaded and ready
 
+router.post('/', async (req, res) => {
+	console.log('Chat request received:', req.body);
+    const { prompt } = req.body;
     try {
         const dbInfo = await fetchDatabaseInfo(prompt);
         const fullPrompt = `${dbInfo}\nUSER: ${prompt}\nASSISTANT:`;
-        const session = new LlamaChatSession({
-            context,
-            promptWrapper: new ModenaMotorsChatPromptWrapper()
-        });
+		console.log('Full prompt:', fullPrompt);
         const response = await session.prompt(fullPrompt);
         res.json({ reply: response });
     } catch (error) {

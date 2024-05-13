@@ -487,3 +487,5 @@ backend/node_modules/wide-align/README.md
 backend/routes/.env.txt
 backend/capybarahermes-2.5-mistral-7b.Q4_K_M.gguf
 backend/Meta-Llama-3-8B-Instruct-bf16.gguf
+backend/phi-2.Q4_K_M.gguf
+backend/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf

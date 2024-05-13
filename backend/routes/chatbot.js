@@ -21,6 +21,7 @@ class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
 
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+//const modelPath = path.join (__dirname, '..', 'tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf');
 const modelPath = path.join(__dirname, '..', 'capybarahermes-2.5-mistral-7b.Q4_K_M.gguf');
 
 const model = new LlamaModel({

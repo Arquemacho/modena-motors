@@ -52,45 +52,53 @@ const ManageVehicles = () => {
   
 
   const handleAddOrUpdateVehicle = async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData();
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData();
 
-    // Append form data correctly
-    formData.append('brand_id', form.brand_id.value);
-    formData.append('category_id', form.category_id.value);
-    formData.append('model', form.model.value);
-    formData.append('year', form.year.value);
-    formData.append('price', form.price.value);
-    formData.append('description', form.description.value);
-    if (form.image.files[0]) formData.append('image', form.image.files[0]);
+  // Append form data
+  formData.append('brand_id', form.brand_id.value);
+  formData.append('category_id', form.category_id.value);
+  formData.append('model', form.model.value);
+  formData.append('year', form.year.value);
+  formData.append('price', form.price.value);
+  formData.append('description', form.description.value);
 
-    const url = editingVehicle ? `http://186.113.234.239:3001/api/vehicles/${editingVehicle.id}` : 'http://186.113.234.239:3001/api/vehicles';
-    const method = editingVehicle ? 'PUT' : 'POST';
+  // Conditionally append image data
+  if (form.image.files[0]) {
+    formData.append('image', form.image.files[0]);
+  } else if (editingVehicle && !form.image.files[0] && editingVehicle.imageURL) {
+    // Append the existing image URL if no new file is provided and it exists
+    formData.append('imageURL', editingVehicle.imageURL);
+  }
 
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        },
-        body: formData
-      });
+  const url = editingVehicle ? `http://186.113.234.239:3001/api/vehicles/${editingVehicle.id}` : 'http://186.113.234.239:3001/api/vehicles';
+  const method = editingVehicle ? 'PUT' : 'POST';
 
-      if (response.ok) {
-        const result = await response.json();
-        const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...result } : veh) : [...vehicles, result];
-        setVehicles(updatedList);
-        setEditingVehicle(null);  // Reset editing state
-      } else {
-        const errorText = await response.text();
-        alert(`Failed to update the vehicle: ${errorText}`);
-      }
-    } catch (error) {
-      console.error('Error on submit:', error.message);
+  try {
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      const updatedList = editingVehicle ? vehicles.map(veh => veh.id === editingVehicle.id ? { ...veh, ...result } : veh) : [...vehicles, result];
+      setVehicles(updatedList);
+      setEditingVehicle(null); // Reset editing state
+    } else {
+      const errorText = await response.text();
+      alert(`Failed to update the vehicle: ${errorText}`);
     }
-  };
+  } catch (error) {
+    console.error('Error on submit:', error.message);
+  }
+};
+
 
   const handleEdit = (vehicle) => {
     setEditingVehicle(vehicle);

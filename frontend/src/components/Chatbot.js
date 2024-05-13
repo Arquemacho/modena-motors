@@ -33,11 +33,11 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://192.168.1.12:3001/api/chatbot', { prompt: input });
+      const response = await axios.post('http://186.113.234.239:3001/api/chatbot', { prompt: input });
       setMessages(messages => [...messages, { text: response.data.reply, sender: 'bot' }]);
     } catch (error) {
       console.error('Error fetching response:', error);
-      setMessages(messages => [...messages, { text: 'Error fetching response from the server.', sender: 'bot' }]);
+      setMessages(messages => [...messages, { text: 'Tuvimos un problema con tu respuesta, por favor intenta de nuevo mas tarde.', sender: 'bot' }]);
     } finally {
       setIsLoading(false);
     }

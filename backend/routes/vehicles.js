@@ -60,22 +60,30 @@ router.post('/', uploadVehicles.single('image'), (req, res) => {
   );
 });
 
-// Actualizar un vehículo
+// Update vehicle route
 router.put('/:id', uploadVehicles.single('image'), (req, res) => {
   const { brand_id, category_id, model, year, price, description } = req.body;
-  const imageURL = req.file ? `/uploads/vehicles/${req.file.filename}` : req.body.imageURL; // Mantén imageURL si no hay nueva imagen
+  
+  // If no new image file is uploaded, use the existing image URL from the request body
+  let imageURL = req.body.imageURL || '';
+
+  // If there is a new file, update the imageURL to the path of the uploaded file
+  if (req.file) {
+    imageURL = `/uploads/vehicles/${req.file.filename}`;
+  }
 
   const sql = 'UPDATE vehicles SET brand_id = ?, category_id = ?, model = ?, year = ?, price = ?, description = ?, imageURL = ? WHERE id = ?';
   const params = [brand_id, category_id, model, year, price, description, imageURL, req.params.id];
 
   db.run(sql, params, function(err) {
     if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: 'Error al actualizar vehículo' });
+      console.error('Error updating vehicle:', err.message);
+      return res.status(500).json({ error: 'Error updating vehicle' });
     }
-    res.json({ message: 'Vehicle updated', changes: this.changes });
+    res.json({ message: 'Vehicle updated successfully', changes: this.changes, imageURL });
   });
 });
+
 
 router.delete('/:id', (req, res) => {
   db.run('DELETE FROM vehicles WHERE id = ?', [req.params.id], function(err) {

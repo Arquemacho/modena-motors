@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/NavBar.css'; // Asegúrate de tener este archivo en la misma carpeta
+import '../styles/NavBar.css';
 
 const NavBar = () => {
     const brands = ["Bugatti", "Koenigsegg", "Ferrari", "Porsche", "Lamborghini", "Aston Martin", "Rolls Royce", "Bentley"];

@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { Link, useNavigate } from 'react-router-dom'; 
 import '../styles/Footer.css';
 
 const Footer = () => {
   const year = new Date().getFullYear();
-  const navigate = useNavigate(); // Hook para la navegación
+  const navigate = useNavigate(); 
 
   const handleContactClick = () => {
-    navigate('/about-us', { state: { message: `Quisiera contactarme con Modena Motors para ...` } }); // Suponiendo que la ruta a la página de contacto sea '/contact-us'
+    navigate('/about-us', { state: { message: `Quisiera contactarme con Modena Motors para ...` } }); 
   };
 
   return (

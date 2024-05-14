@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/AboutUsPage.css';
 import Confetti from 'react-confetti';
@@ -13,6 +13,13 @@ const AboutUsPage = () => {
     phone: ''
   });
   const [messageSent, setMessageSent] = useState(false);
+
+  useEffect(() => {
+    if (defaultMessage) {
+      const form = document.querySelector('.contact-section');
+      form.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [defaultMessage]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -78,7 +85,7 @@ const AboutUsPage = () => {
         <h2 className="section-title">Contacto</h2>
         {messageSent ? (
         <>
-          <Confetti />
+          <Confetti className="confetti"/>
           <h1>Mensaje Enviado</h1>
           <p>¡Gracias por contactarnos! Nos pondremos en contacto contigo pronto.</p>
         </>

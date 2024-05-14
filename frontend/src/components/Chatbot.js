@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../styles/Chatbot.css';
 import { FaPaperPlane, FaTimes, FaComments } from 'react-icons/fa';
-import { css } from "@emotion/react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const Chatbot = () => {
@@ -37,11 +36,19 @@ const Chatbot = () => {
       setMessages(messages => [...messages, { text: response.data.reply, sender: 'bot' }]);
     } catch (error) {
       console.error('Error fetching response:', error);
-      setMessages(messages => [...messages, { text: 'Tuvimos un problema con tu respuesta, por favor intenta de nuevo mas tarde.', sender: 'bot' }]);
+      setMessages(messages => [...messages, { text: 'Tuvimos un problema con tu respuesta, por favor intenta de nuevo más tarde.', sender: 'bot' }]);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setMessages(messages => [...messages, { text: 'Estamos trabajando en brindarte una respuesta. ¿Tienes más preguntas? También puedes contactarnos directamente o llamarnos.', sender: 'bot' }]);
+    }, 30000);
+
+    return () => clearTimeout(timeout);
+  }, [messages]);
 
   return (
     <div className="chatbot-container">

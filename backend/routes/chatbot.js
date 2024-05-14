@@ -2,7 +2,7 @@ import express from 'express';
 import { LlamaModel, LlamaContext, LlamaChatSession, ChatPromptWrapper } from 'node-llama-cpp';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import db from '../database/db.js'; // Adjust the path as necessary
+import db from '../database/db.js'; // Ajusta la ruta según sea necesario
 
 class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
     wrapPrompt(prompt, {systemPrompt, promptIndex}) {
@@ -82,13 +82,18 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Añadir una ruta GET para verificar que el servidor está funcionando
+router.get('/', (req, res) => {
+    res.send('Chatbot server is running');
+});
+
 app.use('/api/chatbot', (req, res, next) => {
     console.log('Incoming request to chatbot server:', req.method, req.url);
     next();
 }, router);
 
-app.listen(PORT, () => {
-    console.log(`Chatbot server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Chatbot server running on http://0.0.0.0:${PORT}`);
 });
 
 export default router;

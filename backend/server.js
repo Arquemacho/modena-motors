@@ -3,7 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import sqlite3 from 'sqlite3';
 import { fileURLToPath } from 'url';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import axios from 'axios';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -95,21 +95,18 @@ app.use('/api/brands', brandsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/contact', contactRouter);
 
-// Configurar el proxy para el chatbot
-app.use('/api/chatbot', (req, res, next) => {
-    console.log('Proxying request to chatbot:', req.method, req.url);
-    next();
-}, createProxyMiddleware({
-    target: 'http://192.168.1.12:3000', // IP del segundo computador
-    changeOrigin: true,
-    onProxyReq: (proxyReq, req, res) => {
-        console.log('Request headers:', proxyReq.getHeaders());
-    },
-    onProxyRes: (proxyRes, req, res) => {
-        console.log('Response headers:', proxyRes.headers);
-    },
-    logLevel: 'debug' // Añadir más detalles de depuración
-}));
+// Reenviar solicitudes al servidor del chatbot
+app.post('/api/chatbot', async (req, res) => {
+    console.log('Received request from frontend:', req.body);
+    try {
+        const response = await axios.post('http://192.168.1.12:3000/api/chatbot', req.body);
+        console.log('Response from chatbot server:', response.data);
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error forwarding request to chatbot:', error);
+        res.status(500).json({ error: 'Failed to process the chat request.' });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

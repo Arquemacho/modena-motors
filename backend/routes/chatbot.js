@@ -32,6 +32,8 @@ const session = new LlamaChatSession({
     promptWrapper: new ModenaMotorsChatPromptWrapper()
 });
 
+app.use(express.json());
+
 async function fetchDatabaseInfo(prompt) {
     const keywords = prompt.toLowerCase().split(" ");
     let info = "";

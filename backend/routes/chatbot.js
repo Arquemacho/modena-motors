@@ -19,14 +19,13 @@ class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
     }
 }
 
+const app = express();
+const PORT = 3001;
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-//const modelPath = path.join (__dirname, '..', 'tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf');
 const modelPath = path.join(__dirname, '..', 'capybarahermes-2.5-mistral-7b.Q4_K_M.gguf');
 
-const model = new LlamaModel({
-    modelPath: modelPath
-});
+const model = new LlamaModel({ modelPath });
 const context = new LlamaContext({ model });
 const session = new LlamaChatSession({
     context,
@@ -67,20 +66,25 @@ async function fetchFromDatabase(sql, prefix, isListShortened) {
     });
 }
 
-
 router.post('/', async (req, res) => {
-	console.log('Chat request received:', req.body);
+    console.log('Chat request received:', req.body);
     const { prompt } = req.body;
     try {
         const dbInfo = await fetchDatabaseInfo(prompt);
         const fullPrompt = `${dbInfo}\nUSER: ${prompt}\nASSISTANT:`;
-		console.log('Full prompt:', fullPrompt);
+        console.log('Full prompt:', fullPrompt);
         const response = await session.prompt(fullPrompt);
         res.json({ reply: response });
     } catch (error) {
         console.error('Error during chat session:', error);
         res.status(500).json({ error: 'Failed to process the chat request.' });
     }
+});
+
+app.use('/api/chatbot', router);
+
+app.listen(PORT, () => {
+    console.log(`Chatbot server running on http://localhost:${PORT}`);
 });
 
 export default router;

@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import sqlite3 from 'sqlite3';
 import { fileURLToPath } from 'url';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -108,8 +109,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/brands', brandsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/contact', contactRouter);
-app.use('/api/chatbot', chatRouter); // Setup the chatbot API route
-
+// Configurar el proxy para el chatbot
+app.use('/api/chatbot', createProxyMiddleware({
+  target: 'http://192.168.1.14:3001', // IP del segundo computador
+  changeOrigin: true,
+}));
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

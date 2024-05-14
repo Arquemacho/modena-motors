@@ -107,7 +107,8 @@ app.use('/api/chatbot', (req, res, next) => {
     },
     onProxyRes: (proxyRes, req, res) => {
         console.log('Response headers:', proxyRes.headers);
-    }
+    },
+    logLevel: 'debug' // Añadir más detalles de depuración
 }));
 
 app.listen(PORT, () => {

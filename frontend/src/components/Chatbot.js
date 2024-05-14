@@ -9,6 +9,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [lastSender, setLastSender] = useState('user');
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -30,25 +31,30 @@ const Chatbot = () => {
     setMessages([...messages, newMessage]);
     setInput('');
     setIsLoading(true);
+    setLastSender('user');
 
     try {
       const response = await axios.post('http://186.113.234.239:3001/api/chatbot', { prompt: input });
       setMessages(messages => [...messages, { text: response.data.reply, sender: 'bot' }]);
+      setLastSender('bot');
     } catch (error) {
       console.error('Error fetching response:', error);
       setMessages(messages => [...messages, { text: 'Tuvimos un problema con tu respuesta, por favor intenta de nuevo más tarde.', sender: 'bot' }]);
+      setLastSender('bot');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setMessages(messages => [...messages, { text: 'Estamos trabajando en brindarte una respuesta. ¿Tienes más preguntas? También puedes contactarnos directamente o llamarnos.', sender: 'bot' }]);
-    }, 30000);
+    if (lastSender === 'user') {
+      const timeout = setTimeout(() => {
+        setMessages(messages => [...messages, { text: 'Estamos trabajando en brindarte una respuesta. ¿Tienes más preguntas? También puedes contactarnos directamente o llamarnos.', sender: 'bot' }]);
+      }, 30000);
 
-    return () => clearTimeout(timeout);
-  }, [messages]);
+      return () => clearTimeout(timeout);
+    }
+  }, [messages, lastSender]);
 
   return (
     <div className="chatbot-container">

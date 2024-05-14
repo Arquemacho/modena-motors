@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
         if (response.includes('USER:')) {
             response = response.split('USER:')[0];
         }
-        if (responde.includes('Eres el asistente virtual')) {
+        if (response.includes('Eres el asistente virtual')) {
             response = response.split('Eres el asistente virtual')[0];
         }
         response = response.substring(0, 500); // Limitar a 500 caracteres

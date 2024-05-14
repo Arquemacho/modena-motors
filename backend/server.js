@@ -97,7 +97,6 @@ import authRouter from './routes/authRoutes.js';
 import brandsRouter from './routes/brands.js';
 import categoriesRouter from './routes/categories.js';
 import contactRouter from './routes/contact.js';
-import chatRouter from './routes/chatbot.js'; // Make sure this import is correct
 // Middlewares// Middlewares
 app.use(express.json());
 app.use(cors());

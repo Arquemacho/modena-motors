@@ -74,6 +74,7 @@ router.post('/', async (req, res) => {
         const fullPrompt = `${dbInfo}\nUSER: ${prompt}\nASSISTANT:`;
         console.log('Full prompt:', fullPrompt);
         const response = await session.prompt(fullPrompt);
+        console.log('Response from model:', response);
         res.json({ reply: response });
     } catch (error) {
         console.error('Error during chat session:', error);
@@ -81,7 +82,10 @@ router.post('/', async (req, res) => {
     }
 });
 
-app.use('/api/chatbot', router);
+app.use('/api/chatbot', (req, res, next) => {
+    console.log('Incoming request to chatbot server:', req.method, req.url);
+    next();
+}, router);
 
 app.listen(PORT, () => {
     console.log(`Chatbot server running on http://localhost:${PORT}`);

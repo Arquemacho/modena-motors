@@ -33,18 +33,18 @@ db.serialize(() => {
     )
   `);
   db.run(`
-CREATE TABLE IF NOT EXISTS brands (
+    CREATE TABLE IF NOT EXISTS brands (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL
     );
-    `);
+  `);
 
   db.run(`
-CREATE TABLE IF NOT EXISTS categories (
+    CREATE TABLE IF NOT EXISTS categories (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL
     );
-    `);
+  `);
 
   // Tabla de vehículos
   db.run(`
@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS categories (
       FOREIGN KEY (brand_id) REFERENCES brands(id),
       FOREIGN KEY (category_id) REFERENCES categories(id)
     );
-
   `);
 
   // Tabla de empleados
@@ -75,16 +74,15 @@ CREATE TABLE IF NOT EXISTS categories (
   `);
 
   db.run(`
-  CREATE TABLE IF NOT EXISTS contact_requests (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    client_id INTEGER,
-    message TEXT NOT NULL,
-    attended BOOLEAN DEFAULT FALSE,
-    priority BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (client_id) REFERENCES clients(id)
-  )
-`);
-
+    CREATE TABLE IF NOT EXISTS contact_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      client_id INTEGER,
+      message TEXT NOT NULL,
+      attended BOOLEAN DEFAULT FALSE,
+      priority BOOLEAN DEFAULT FALSE,
+      FOREIGN KEY (client_id) REFERENCES clients(id)
+    )
+  `);
 
   console.log('Tablas creadas con éxito');
 });
@@ -108,11 +106,22 @@ app.use('/api/auth', authRouter);
 app.use('/api/brands', brandsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/contact', contactRouter);
+
 // Configurar el proxy para el chatbot
-app.use('/api/chatbot', createProxyMiddleware({
-  target: 'http://192.168.1.12:3001', // IP del segundo computador
+app.use('/api/chatbot', (req, res, next) => {
+  console.log('Proxying request to chatbot:', req.method, req.url);
+  next();
+}, createProxyMiddleware({
+  target: 'http://192.168.1.14:3001', // IP del segundo computador
   changeOrigin: true,
+  onProxyReq: (proxyReq, req, res) => {
+    console.log('Request headers:', proxyReq.getHeaders());
+  },
+  onProxyRes: (proxyRes, req, res) => {
+    console.log('Response headers:', proxyRes.headers);
+  }
 }));
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

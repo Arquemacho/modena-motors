@@ -2,7 +2,7 @@ import express from 'express';
 import { LlamaModel, LlamaContext, LlamaChatSession, ChatPromptWrapper } from 'node-llama-cpp';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import db from '../database/db.js'; // Ajusta la ruta según sea necesario
+import db from '../database/db.js';
 
 class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
     wrapPrompt(prompt, {systemPrompt, promptIndex}) {
@@ -75,7 +75,17 @@ router.post('/', async (req, res) => {
         const dbInfo = await fetchDatabaseInfo(prompt);
         const fullPrompt = `${dbInfo}\nUSER: ${prompt}\nASSISTANT:`;
         console.log('Full prompt:', fullPrompt);
-        const response = await session.prompt(fullPrompt);
+        let response = await session.prompt(fullPrompt);
+
+        // Limitar la longitud de la respuesta y cortar en "USER:"
+        if (response.includes('USER:')) {
+            response = response.split('USER:')[0];
+        }
+        if (responde.includes('Eres el asistente virtual')) {
+            response = response.split('Eres el asistente virtual')[0];
+        }
+        response = response.substring(0, 500); // Limitar a 500 caracteres
+
         console.log('Response from model:', response);
         res.json({ reply: response });
     } catch (error) {

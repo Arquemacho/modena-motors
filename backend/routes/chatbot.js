@@ -2,11 +2,16 @@ import express from 'express';
 import { LlamaModel, LlamaContext, LlamaChatSession, ChatPromptWrapper } from 'node-llama-cpp';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import db from '../database/db.js';
+import db from '../database/db.js'; // Ajusta la ruta según sea necesario
 
 class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
     wrapPrompt(prompt, {systemPrompt, promptIndex}) {
-        const customSystemPrompt = "Eres el asistente virtual de Modena Motors, dedicado a ayudar a los usuarios a obtener información precisa sobre nuestros vehículos y servicios.";
+        const customSystemPrompt = `
+        Eres el asistente virtual de Modena Motors. Tus respuestas deben ser cortas y precisas, 
+        enfocadas únicamente en nuestra empresa y nuestros vehículos. 
+        Evita temas controversiales como política, religión, y cualquier otro tema sensible. 
+        No incluyas el prompt del usuario en tu respuesta. 
+        Limita la longitud de tus respuestas a 500 caracteres.`;
         return `${customSystemPrompt}\nUSER: ${prompt}\nASSISTANT:`;
     }
 
@@ -77,7 +82,7 @@ router.post('/', async (req, res) => {
         console.log('Full prompt:', fullPrompt);
         let response = await session.prompt(fullPrompt);
 
-        // Limitar la longitud de la respuesta y cortar en "USER:"
+        // Limitar la longitud de la respuesta y cortar en "USER:" o "Eres el asistente virtual"
         if (response.includes('USER:')) {
             response = response.split('USER:')[0];
         }

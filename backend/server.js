@@ -112,7 +112,7 @@ app.use('/api/chatbot', (req, res, next) => {
   console.log('Proxying request to chatbot:', req.method, req.url);
   next();
 }, createProxyMiddleware({
-  target: 'http://192.168.1.14:3001', // IP del segundo computador
+  target: 'http://192.168.1.12:3001', // IP del segundo computador
   changeOrigin: true,
   onProxyReq: (proxyReq, req, res) => {
     console.log('Request headers:', proxyReq.getHeaders());

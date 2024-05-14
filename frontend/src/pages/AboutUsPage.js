@@ -56,7 +56,6 @@ const AboutUsPage = () => {
             por el diseño de vanguardia y la ingeniería de precisión, ofreciendo experiencias exclusivas 
             a los entusiastas de los superautos alrededor del mundo.
           </p>
-          <img src="/images/about-history.jpg" alt="Our History" className="about-image"/>
         </section>
         <section className="about-section">
           <h2 className="section-title">Innovación y Calidad</h2>
@@ -65,7 +64,6 @@ const AboutUsPage = () => {
             lujo y rendimiento sin precedentes. Cada vehículo es un testimonio de nuestra búsqueda constante 
             por la innovación y la excelencia en automoción.
           </p>
-          <img src="/images/about-innovation.jpg" alt="Innovation and Quality" className="about-image"/>
         </section>
         <section className="about-section">
           <h2 className="section-title">Presencia Global</h2>
@@ -74,7 +72,6 @@ const AboutUsPage = () => {
             un servicio excepcional y accesibilidad para todos nuestros clientes, independientemente 
             de donde se encuentren.
           </p>
-          <img src="/images/about-global.jpg" alt="Global Presence" className="about-image"/>
         </section>
       </div>
       <section className="contact-section">

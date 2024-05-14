@@ -20,7 +20,7 @@ class ModenaMotorsChatPromptWrapper extends ChatPromptWrapper {
 }
 
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 const router = express.Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const modelPath = path.join(__dirname, '..', 'capybarahermes-2.5-mistral-7b.Q4_K_M.gguf');

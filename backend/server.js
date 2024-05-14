@@ -110,7 +110,7 @@ app.use('/api/categories', categoriesRouter);
 app.use('/api/contact', contactRouter);
 // Configurar el proxy para el chatbot
 app.use('/api/chatbot', createProxyMiddleware({
-  target: 'http://192.168.1.14:3001', // IP del segundo computador
+  target: 'http://192.168.1.12:3001', // IP del segundo computador
   changeOrigin: true,
 }));
 app.listen(PORT, () => {
